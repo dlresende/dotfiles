@@ -2,10 +2,15 @@
 
 function main() {
 	install_homebrew
+	install_stuff
 }
 
 function install_homebrew() {
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+}
+
+function install_stuff() {
+	brew bundle
 }
 
 main
