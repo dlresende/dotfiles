@@ -3,6 +3,7 @@
 function main() {
 	install_homebrew
 	install_stuff
+	configure_vim
 }
 
 function install_homebrew() {
@@ -11,6 +12,18 @@ function install_homebrew() {
 
 function install_stuff() {
 	brew bundle
+}
+
+function configure_vim() {
+	if [[ ! -d "${HOME}/.vim" ]] ; then
+		git clone https://github.com/luan/vimfiles.git ~/.vim
+	fi
+	(
+		cd "${HOME}/.vim"
+		git checkout master
+		git pull -r
+		./update
+	)
 }
 
 main
