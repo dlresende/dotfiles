@@ -76,6 +76,7 @@ brew 'cloudfoundry/tap/cf-cli'
 brew 'git-duet/tap/git-duet'
 brew 'neovim/neovim/neovim'
 brew 'universal-ctags/universal-ctags/universal-ctags', args: ['HEAD']
+brew 'reattach-to-user-namespace'
 
 cask 'atom'
 cask 'docker'
