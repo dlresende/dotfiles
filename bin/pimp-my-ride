@@ -28,7 +28,7 @@ configure_vim() {
 }
 
 configure_tmux() {
-  TMUX_PLUGIN_MANAGER_PATH='$HOME/.tmux/plugins'
+  TMUX_PLUGIN_MANAGER_PATH='${HOME}/.tmux/plugins'
 
   echo "Updating tmux plugins..."
   if [[ ! -d "$TMUX_PLUGIN_MANAGER_PATH/tpm" ]] ; then
