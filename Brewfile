@@ -79,6 +79,7 @@ brew 'universal-ctags/universal-ctags/universal-ctags', args: ['HEAD']
 brew 'reattach-to-user-namespace'
 brew 'scala'
 brew 'sbt'
+brew 'zsh'  # required by oh-my-zsh
 
 cask 'atom'
 cask 'docker'
