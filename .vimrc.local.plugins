@@ -1,2 +1,2 @@
-" This is a "bundle" for Vim that builds off of the initial Scala plugin modules by Stefan Matthias Aust and adds some more "stuff"
+" Builds off of the initial Scala plugin modules by Stefan Matthias Aust and adds some more stuff
 Plug 'derekwyatt/vim-scala'
