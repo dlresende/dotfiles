@@ -81,6 +81,7 @@ brew 'scala'
 brew 'sbt'
 brew 'zsh'  # required by oh-my-zsh
 
+cask 'coconutbattery'
 cask 'atom'
 cask 'docker'
 cask 'dropbox'
