@@ -18,11 +18,11 @@ install_stuff() {
 }
 
 configure_vim() {
-  if [[ ! -d "${HOME}/.vim" ]] ; then
+  if [[ ! -d "$HOME/.vim" ]] ; then
     git clone https://github.com/luan/vimfiles.git ~/.vim
   fi
   (
-  cd "${HOME}/.vim" || exit 1
+  cd "$HOME/.vim" || exit 1
   git checkout master
   git pull -r
   ./update
@@ -36,10 +36,10 @@ configure_tmux() {
   if [[ ! -d "$TMUX_PLUGIN_MANAGER_PATH/tpm" ]] ; then
     mkdir -p "$TMUX_PLUGIN_MANAGER_PATH"
     git clone https://github.com/tmux-plugins/tpm "$TMUX_PLUGIN_MANAGER_PATH/tpm"
-    ./"$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/install_plugins
+    "$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/install_plugins
   else
     (cd "$TMUX_PLUGIN_MANAGER_PATH/tpm" && git pull )
-    ./"$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/update_plugins all
+    "$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/update_plugins all
   fi
 }
 
