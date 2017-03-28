@@ -3,6 +3,7 @@
 main() {
   install_homebrew
   install_stuff
+  configure_homebrew_to_work_with_multiple_accounts
   configure_vim
   configure_tmux
   install_oh_my_zsh
@@ -40,6 +41,11 @@ configure_tmux() {
     (cd "$TMUX_PLUGIN_MANAGER_PATH/tpm" && git pull )
     ./"$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/update_plugins all
   fi
+}
+
+configure_homebrew_to_work_with_multiple_accounts() {
+  sudo chgrp -R admin /usr/local/Homebrew
+  sudo chmod -R g+w /usr/local/Homebrew
 }
 
 install_oh_my_zsh() {
