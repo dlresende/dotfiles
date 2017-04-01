@@ -14,7 +14,7 @@ install_homebrew() {
 }
 
 install_stuff() {
-  brew bundle
+  brew bundle --global
 }
 
 configure_vim() {
