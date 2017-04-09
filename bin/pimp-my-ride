@@ -27,6 +27,8 @@ configure_vim() {
   git pull -r
   ./update
   )
+
+  pip3 install --user --upgrade neovim # Required by some plugins like deoplate
 }
 
 configure_tmux() {
