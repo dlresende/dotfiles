@@ -47,18 +47,18 @@ configure_tmux() {
 
 configure_homebrew_to_work_with_multiple_accounts() {
   echo "Updating file permissions to allow Homebrew being used with accounts..."
-  
+
   local usr_local_permissions_backup_file
   usr_local_permissions_backup_file="$(gmktemp -t usr_local_permissions_backup_file.XXXXXX.txt)"
   ls -lhR /usr/local > "$usr_local_permissions_backup_file"
-  
+
   # Some tools (like ruby-install) base themselves on the user having installed Homebrew
   # in order to install and configure stuff (by doing: `/usr/bin/stat -f %Su /usr/local/bin/brew`)
-  sudo chown -h $(whoami) /usr/local/bin/brew
-  
+  sudo chown -h "$(whoami)" /usr/local/bin/brew
+
   sudo chgrp -R admin /usr/local/{Cellar,Homebrew}
   sudo chmod -R g+w /usr/local/{Cellar,Homebrew,lib}
-  
+
   # Workaround to avoid Permission Denied issues with `brew link`
   # More details: http://stackoverflow.com/questions/8175697/rm-cannot-remove-permission-denied
   sudo chmod -R g+w /usr/local/lib
