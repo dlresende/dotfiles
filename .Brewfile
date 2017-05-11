@@ -80,6 +80,7 @@ brew 'reattach-to-user-namespace'
 brew 'scala'
 brew 'sbt'
 brew 'zsh'  # required by oh-my-zsh
+brew 'nmap'
 
 cask 'coconutbattery'
 cask 'atom'
