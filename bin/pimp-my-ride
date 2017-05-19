@@ -1,12 +1,30 @@
 #!/usr/bin/env bash
 
 main() {
+  setup_environment_for_installation
   install_homebrew
   install_stuff
+  update_stuff
   configure_homebrew_to_work_with_multiple_accounts
   configure_vim
   configure_tmux
   install_oh_my_zsh
+}
+
+setup_environment_for_installation() {
+  brew install lastpass-cli
+  prey_api_key=$(lpass show --notes Prey)
+  export API_KEY=$prey_api_key
+}
+
+log_into_lastpass() {
+  lpass login
+
+  if [[ $? == 1 ]] ; then
+    echo -n "Enter the email used to connect to LastPass: "
+    read -r email
+    lpass login "$email"
+  fi
 }
 
 install_homebrew() {
@@ -15,6 +33,14 @@ install_homebrew() {
 
 install_stuff() {
   brew bundle --global
+}
+
+update_stuff() {
+  outdated=$(brew cask outdated)
+
+  for app in $outdated; do
+    brew cask reinstall "$app"
+  done
 }
 
 configure_vim() {
