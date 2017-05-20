@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 main() {
-  setup_environment_for_installation
+  prepare_environment_for_installation
   install_homebrew
   install_stuff
   update_stuff
@@ -11,7 +11,7 @@ main() {
   install_oh_my_zsh
 }
 
-setup_environment_for_installation() {
+prepare_environment_for_installation() {
   brew install lastpass-cli
   prey_api_key=$(lpass show --notes Prey)
   export API_KEY=$prey_api_key
