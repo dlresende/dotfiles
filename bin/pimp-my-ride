@@ -9,6 +9,7 @@ main() {
   configure_vim
   configure_tmux
   install_oh_my_zsh
+  configure_go_workspace
 }
 
 prepare_environment_for_installation() {
@@ -92,6 +93,17 @@ configure_homebrew_to_work_with_multiple_accounts() {
 
 install_oh_my_zsh() {
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+}
+
+configure_go_workspace() {
+  if [[ -L "$HOME"/go/src && -d "$HOME"/go/src ]]
+  then
+    echo "Go workspace already configured. Moving on."
+  fi
+
+  mv "$HOME"/go/src/* "$HOME"/Projects
+  rm -fr "$HOME"/go/src
+  ln -s "$HOME"/Projects "$HOME"/go/src
 }
 
 main
