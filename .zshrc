@@ -86,4 +86,7 @@ export EDITOR=nvim
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Do not share history between tabs and windows
+unsetopt share_history
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
