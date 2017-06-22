@@ -81,6 +81,7 @@ brew 'scala'
 brew 'sbt'
 brew 'zsh'  # required by oh-my-zsh
 brew 'nmap'
+brew 'bosh-cli'
 
 cask 'coconutbattery'
 cask 'atom'
