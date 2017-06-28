@@ -89,4 +89,7 @@ export EDITOR=nvim
 # Do not share history between tabs and windows
 unsetopt share_history
 
+# Setup direnv
+eval "$(direnv hook zsh)"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
