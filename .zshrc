@@ -92,4 +92,6 @@ unsetopt share_history
 # Setup direnv
 eval "$(direnv hook zsh)"
 
+export PATH="/usr/local/sbin:$PATH"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
