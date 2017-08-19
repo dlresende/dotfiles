@@ -82,6 +82,7 @@ brew 'sbt'
 brew 'zsh'  # required by oh-my-zsh
 brew 'nmap'
 brew 'bosh-cli'
+brew 'leiningen'
 
 cask 'coconutbattery'
 cask 'atom'
