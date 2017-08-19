@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 main() {
+  configure_homebrew_to_work_with_multiple_accounts
   prepare_environment_for_installation
   install_homebrew
   install_stuff
   update_stuff
-  configure_homebrew_to_work_with_multiple_accounts
   configure_vim
   configure_tmux
   install_oh_my_zsh
