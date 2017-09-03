@@ -1,2 +1,3 @@
 " Builds off of the initial Scala plugin modules by Stefan Matthias Aust and adds some more stuff
 Plug 'derekwyatt/vim-scala'
+Plug 'artur-shaik/vim-javacomplete2'
