@@ -1,0 +1,11 @@
+; More info about settings:
+; - https://github.com/maksimr/vim-jsbeautify#settings
+; - https://github.com/beautify-web/js-beautify#user-content-options
+
+[**.js]
+jslint_happy = true
+space-in-paren = false
+space-in-empty-paren = false
+space-after-anon-function = true
+indent_size = 4
+indent_with_tabs = false
