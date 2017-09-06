@@ -1,0 +1,3 @@
+" Javascript {{
+  autocmd BufWriteCmd *.js call JsBeautify()
+" }}
