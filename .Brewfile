@@ -85,6 +85,7 @@ brew 'watch'
 brew 'wget'
 brew 'zsh'  # required by oh-my-zsh
 
+cask 'android-platform-tools'
 cask 'atom'
 cask 'caffeine'
 cask 'coconutbattery'
