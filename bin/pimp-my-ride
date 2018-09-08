@@ -2,34 +2,34 @@
 
 [[ -z "$DEEBUG" ]] || set -x
 
-export HOMEBREW_NO_ENV_FILTERING=1
-export API_KEY
+# shellcheck disable=SC1090
+lpass show --notes dotfilesrc > ~/.dotfilesrc && source ~/.dotfilesrc
 
 main() {
   configure_homebrew_to_work_with_multiple_accounts
-  prepare_environment_for_installation
-  install_homebrew
+  update_homebrew || install_homebrew
   install_stuff
-  update_stuff
   configure_vim
   configure_tmux
   install_oh_my_zsh
   configure_go_workspace
 }
 
-prepare_environment_for_installation() {
-  brew install lastpass-cli
-  API_KEY="$(lpass show --notes Prey)"
+configure_homebrew_to_work_with_multiple_accounts() {
+  # Some tools (like ruby-install) base themselves on the user having installed Homebrew
+  # in order to install and configure stuff (by doing: `/usr/bin/stat -f %Su /usr/local/bin/brew`)
+  sudo chown -h "$(whoami)" /usr/local/bin/brew
+
+  local homebrew_folders=( "/usr/local/Cellar" "/usr/local/Homebrew" "/usr/local/var/homebrew" "/usr/local/lib" )
+  for folder in "${homebrew_folders[@]}"
+  do
+    sudo chgrp -R admin "$folder"
+    sudo chmod -R g=u "$folder"
+  done
 }
 
-log_into_lastpass() {
-  lpass login
-
-  if [[ $? == 1 ]] ; then
-    echo -n "Enter the email used to connect to LastPass: "
-    read -r email
-    lpass login "$email"
-  fi
+update_homebrew() {
+  brew -h > /dev/null 2>&1 && brew update
 }
 
 install_homebrew() {
@@ -40,23 +40,16 @@ install_stuff() {
   brew bundle --global
 }
 
-update_stuff() {
-  outdated=$(brew cask outdated)
-
-  for app in $outdated; do
-    brew cask reinstall "$app"
-  done
-}
-
 configure_vim() {
   if [[ ! -d "$HOME/.vim" ]] ; then
     git clone https://github.com/luan/vimfiles.git ~/.vim
   fi
+
   (
-  cd "$HOME/.vim" || exit 1
-  git checkout master
-  git pull -r
-  ./update
+    cd "$HOME/.vim" || exit 1
+    git checkout master
+    git pull -r
+    ./update
   )
 
   pip3 install --user --upgrade neovim # Required by some plugins like deoplate
@@ -71,28 +64,9 @@ configure_tmux() {
     git clone https://github.com/tmux-plugins/tpm "$TMUX_PLUGIN_MANAGER_PATH/tpm"
     "$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/install_plugins
   else
-    (cd "$TMUX_PLUGIN_MANAGER_PATH/tpm" && git pull )
+    ( cd "$TMUX_PLUGIN_MANAGER_PATH/tpm" && git pull )
     "$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/update_plugins all
   fi
-}
-
-configure_homebrew_to_work_with_multiple_accounts() {
-  echo "Updating file permissions to allow Homebrew being used with accounts..."
-
-  local usr_local_permissions_backup_file
-  usr_local_permissions_backup_file="$(gmktemp -t usr_local_permissions_backup_file.XXXXXX.txt)"
-  ls -lhR /usr/local > "$usr_local_permissions_backup_file"
-
-  # Some tools (like ruby-install) base themselves on the user having installed Homebrew
-  # in order to install and configure stuff (by doing: `/usr/bin/stat -f %Su /usr/local/bin/brew`)
-  sudo chown -h "$(whoami)" /usr/local/bin/brew
-
-  local homebrew_folders=( "/usr/local/Cellar" "/usr/local/Homebrew" "/usr/local/var/homebrew" "/usr/local/lib" )
-  for folder in "${homebrew_folders[@]}"
-  do
-    sudo chgrp -R admin "$folder"
-    sudo chmod -R g=u "$folder"
-  done
 }
 
 install_oh_my_zsh() {
