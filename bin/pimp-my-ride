@@ -87,8 +87,12 @@ configure_homebrew_to_work_with_multiple_accounts() {
   # in order to install and configure stuff (by doing: `/usr/bin/stat -f %Su /usr/local/bin/brew`)
   sudo chown -h "$(whoami)" /usr/local/bin/brew
 
-  sudo chgrp -R admin /usr/local
-  sudo chmod -R g+w /usr/local
+  local homebrew_folders=( "/usr/local/Cellar" "/usr/local/Homebrew" "/usr/local/var/homebrew" "/usr/local/lib" )
+  for folder in "${homebrew_folders[@]}"
+  do
+    sudo chgrp -R admin "$folder"
+    sudo chmod -R g=u "$folder"
+  done
 }
 
 install_oh_my_zsh() {
