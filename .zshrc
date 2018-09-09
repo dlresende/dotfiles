@@ -94,4 +94,8 @@ eval "$(direnv hook zsh)"
 
 export PATH="/usr/local/sbin:$PATH"
 
+# Setup jenv
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
