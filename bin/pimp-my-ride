@@ -20,7 +20,7 @@ configure_homebrew_to_work_with_multiple_accounts() {
   # in order to install and configure stuff (by doing: `/usr/bin/stat -f %Su /usr/local/bin/brew`)
   sudo chown -h "$(whoami)" /usr/local/bin/brew
 
-  local homebrew_folders=( "/usr/local/Cellar" "/usr/local/Homebrew" "/usr/local/var/homebrew" "/usr/local/lib" )
+  local homebrew_folders=( "/usr/local/Cellar" "/usr/local/Homebrew" "/usr/local/var/homebrew" "/usr/local/lib" "/usr/local/share/man" "/usr/local/bin")
   for folder in "${homebrew_folders[@]}"
   do
     sudo chgrp -R admin "$folder"
