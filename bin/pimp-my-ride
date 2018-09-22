@@ -42,15 +42,8 @@ install_stuff() {
 
 configure_vim() {
   if [[ ! -d "$HOME/.vim" ]] ; then
-    git clone https://github.com/luan/vimfiles.git ~/.vim
+    git clone https://github.com/dlresende/vimfiles.git ~/.vim
   fi
-
-  (
-    cd "$HOME/.vim" || exit 1
-    git checkout master
-    git pull -r
-    ./update
-  )
 
   pip3 install --user --upgrade neovim # Required by some plugins like deoplate
 }
