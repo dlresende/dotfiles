@@ -84,7 +84,6 @@ brew 'universal-ctags', args: ['HEAD']
 brew 'vim', args: ['with-lua']
 brew 'watch'
 brew 'wget'
-brew 'yamllint'
 brew 'zsh'  # required by oh-my-zsh
 
 cask 'android-platform-tools'
