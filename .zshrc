@@ -58,7 +58,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-export PATH="${HOME}/go/bin:${HOME}/bin:${PATH}"
+export PATH="${HOME}/go/bin:${HOME}/bin:/Users/diego/Library/Python/2.7/bin:${PATH}"
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
