@@ -46,6 +46,12 @@ configure_vim() {
   fi
 
   pip3 install --user --upgrade neovim # Required by some plugins like deoplate
+
+  (
+    cd "$HOME/.vim" || exit 1
+    git submodule update --recursive
+    ./bin/install
+  )
 }
 
 configure_tmux() {
