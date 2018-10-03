@@ -19,7 +19,7 @@ brew 'bbl'
 brew 'bosh-cli'
 brew 'cabal-install'
 brew 'cf-cli'
-brew 'checkstyle'
+brew 'checkstyle' # required by .vim
 brew 'chruby'
 brew 'cmake'
 brew 'coreutils'
@@ -62,6 +62,7 @@ brew 'oniguruma'
 brew 'openssl'
 brew 'webp'
 brew 'wxmac'
+brew 'pmd'
 brew 'python'
 brew 'maven'
 brew 'mr'
@@ -77,7 +78,7 @@ brew 'ruby-install'
 brew 's3cmd'
 brew 'scala'
 brew 'sbt'
-brew 'shellcheck'
+brew 'shellcheck' # required by .vim
 brew 'the_silver_searcher'
 brew 'tig'
 brew 'tmate'
@@ -87,6 +88,7 @@ brew 'universal-ctags', args: ['HEAD']
 brew 'vim', args: ['with-lua']
 brew 'watch'
 brew 'wget'
+brew 'yamllint' # required by .vim
 brew 'zsh'  # required by oh-my-zsh
 
 cask 'android-platform-tools'
