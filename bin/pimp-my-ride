@@ -49,8 +49,7 @@ configure_vim() {
 
   (
     cd "$HOME/.vim" || exit 1
-    git submodule update --recursive
-    ./bin/install
+    make install
   )
 }
 
