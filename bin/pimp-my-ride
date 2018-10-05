@@ -38,6 +38,7 @@ install_homebrew() {
 
 install_stuff() {
   brew bundle --global
+  gem install --file "$HOME/.Gemfile"
 }
 
 configure_vim() {
