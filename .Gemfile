@@ -1,3 +1,4 @@
 source "http://rubygems.org"
 
-gem 'rubocop' # required by vim ale plugin
+gem 'rubocop' # used by vim ale plugin
+gem 'reek'    # used by vim ale plugin
