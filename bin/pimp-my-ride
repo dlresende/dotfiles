@@ -6,8 +6,7 @@
 lpass show --notes dotfilesrc > ~/.dotfilesrc && source ~/.dotfilesrc
 
 main() {
-  configure_homebrew_to_work_with_multiple_accounts
-  update_homebrew || install_homebrew
+  configure_env_to_allow_homebrew_to_work_with_multiple_accounts
   install_stuff
   configure_vim
   configure_tmux
@@ -15,16 +14,23 @@ main() {
   configure_go_workspace
 }
 
-configure_homebrew_to_work_with_multiple_accounts() {
-  # Some tools (like ruby-install) base themselves on the user having installed Homebrew
-  # in order to install and configure stuff (by doing: `/usr/bin/stat -f %Su /usr/local/bin/brew`)
-  sudo chown -h "$(whoami)" /usr/local/bin/brew
+configure_env_to_allow_homebrew_to_work_with_multiple_accounts() {
+  local homebrew_directories=( \
+    /usr/local/Cellar	\
+    /usr/local/Homebrew	\
+    /usr/local/var/homebrew	\
+    /usr/local/lib	\
+    /usr/local/share	\
+    /usr/local/etc	\
+    /usr/local/Caskroom	\
+    /usr/local/bin	\
+    )
 
-  local homebrew_folders=( "/usr/local/Cellar" "/usr/local/Homebrew" "/usr/local/var/homebrew" "/usr/local/lib" "/usr/local/share/man" "/usr/local/bin")
-  for folder in "${homebrew_folders[@]}"
+  for dir in "${homebrew_directories[@]}"
   do
-    sudo chgrp -R admin "$folder"
-    sudo chmod -R g=u "$folder"
+    sudo chown -R -H "$(whoami)" "$dir"
+    sudo chown -R "$(whoami)" "$dir"
+    sudo chown -h "$(whoami)" "$dir"
   done
 }
 
@@ -37,8 +43,18 @@ install_homebrew() {
 }
 
 install_stuff() {
+  update_homebrew || install_homebrew
+
   brew bundle --global
   gem install --no-lock --file "$HOME/.Gemfile"
+}
+
+checkout_projects() {
+  mkdir -p "$HOME/Projects"
+
+  ( cd "$HOME" || exit 1
+    mr update
+  )
 }
 
 configure_vim() {
@@ -48,8 +64,7 @@ configure_vim() {
 
   pip3 install --user --upgrade neovim # Required by some plugins like deoplate
 
-  (
-    cd "$HOME/.vim" || exit 1
+  ( cd "$HOME/.vim" || exit 1
     make install
   )
 }
