@@ -31,3 +31,6 @@ checkout = git clone 'git@github.com:dlresende/kata-geometric-modeling-system.gi
 
 [Projects/github.com/concourse/concourse-docker]
 checkout = git clone 'https://github.com/concourse/concourse-docker.git' 'concourse-docker'
+
+[Projects/github.com/dlresende/workshop-pipelines-done-right]
+checkout = git clone 'git@github.com:dlresende/workshop-pipelines-done-right.git' 'workshop-pipelines-done-right'
