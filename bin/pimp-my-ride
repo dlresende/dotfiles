@@ -22,9 +22,10 @@ configure_env_to_allow_homebrew_to_work_with_multiple_accounts() {
     /usr/local/lib	\
     /usr/local/share	\
     /usr/local/etc	\
+    /usr/local/opt \
     /usr/local/Caskroom	\
     /usr/local/bin	\
-    )
+  )
 
   for dir in "${homebrew_directories[@]}"
   do
