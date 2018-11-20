@@ -99,4 +99,6 @@ export PATH="/usr/local/sbin:$PATH"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Contents/Home
 export PATH="$JAVA_HOME/bin:$PATH"
 
+export ZSH_DISABLE_COMPFIX=true
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
