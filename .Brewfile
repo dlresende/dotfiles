@@ -90,6 +90,7 @@ brew 'vim', args: ['with-lua']
 brew 'watch'
 brew 'wget'
 brew 'yamllint' # required by .vim
+brew 'yarn'
 brew 'zsh'  # required by oh-my-zsh
 
 cask 'android-platform-tools'
