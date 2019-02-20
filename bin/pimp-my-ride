@@ -7,6 +7,7 @@ lpass show --notes dotfilesrc > ~/.dotfilesrc && source ~/.dotfilesrc
 
 main() {
   configure_env_to_allow_homebrew_to_work_with_multiple_accounts
+  configure_ruby
   install_stuff
   configure_vim
   configure_tmux
@@ -33,6 +34,10 @@ configure_env_to_allow_homebrew_to_work_with_multiple_accounts() {
     sudo chown -R "$(whoami)" "$dir"
     sudo chown -h "$(whoami)" "$dir"
   done
+}
+
+configure_ruby() {
+  rbenv install -s "$(cat ~/.rbenv/version)"
 }
 
 update_homebrew() {

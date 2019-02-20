@@ -101,4 +101,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 export ZSH_DISABLE_COMPFIX=true
 
+# Configure Ruby
+eval "$(rbenv init -)"
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
