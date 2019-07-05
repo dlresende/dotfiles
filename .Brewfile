@@ -23,7 +23,6 @@ brew 'checkstyle' # required by .vim
 brew 'chruby'
 brew 'cmake'
 brew 'coreutils'
-brew 'ctags'
 brew 'direnv'
 brew 'docker'
 brew 'erlang'
@@ -80,6 +79,7 @@ brew 's3cmd'
 brew 'scala'
 brew 'sbt'
 brew 'shellcheck' # required by .vim
+brew 'terraform'  # required by bbl
 brew 'the_silver_searcher'
 brew 'tig'
 brew 'tmate'
@@ -94,7 +94,6 @@ brew 'yarn'
 brew 'zsh'  # required by oh-my-zsh
 
 cask 'android-platform-tools'
-cask 'atom'
 cask 'caffeine'
 cask 'coconutbattery'
 cask 'cozy-drive'
