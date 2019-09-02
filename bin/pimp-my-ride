@@ -54,7 +54,6 @@ install_stuff() {
   brew bundle --global
   gem install --no-lock --file "$HOME/.Gemfile"
   python3 -m pip install --user --upgrade pynvim # some neovim plugins like javascript-typescript-langserver need the pynvim module
-  npm install -g javascript-typescript-langserver
 }
 
 checkout_projects() {
