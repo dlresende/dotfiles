@@ -89,6 +89,7 @@ brew 'tig'
 brew 'tmate'
 brew 'tmux'
 brew 'tree'
+brew 'typescript'
 brew 'universal-ctags', args: ['HEAD']
 brew 'vim', args: ['with-lua']
 brew 'watch'
