@@ -52,8 +52,6 @@ install_stuff() {
   update_homebrew || install_homebrew
 
   brew bundle --global
-  gem install --no-lock --file "$HOME/.Gemfile"
-  python3 -m pip install --user --upgrade pynvim # some neovim plugins like javascript-typescript-langserver need the pynvim module
 }
 
 checkout_projects() {
@@ -68,8 +66,6 @@ configure_vim() {
   if [[ ! -d "$HOME/.vim" ]] ; then
     git clone https://github.com/dlresende/vimfiles.git ~/.vim
   fi
-
-  pip3 install --user --upgrade neovim # Required by some plugins like deoplate
 
   ( cd "$HOME/.vim" || exit 1
     make install
