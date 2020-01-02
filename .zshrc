@@ -105,3 +105,6 @@ export ZSH_DISABLE_COMPFIX=true
 eval "$(rbenv init -)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# added by travis gem
+[ -f /Users/dlresende/.travis/travis.sh ] && source /Users/dlresende/.travis/travis.sh
