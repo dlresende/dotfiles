@@ -13,6 +13,7 @@ main() {
   configure_tmux
   install_oh_my_zsh
   configure_go_workspace
+  configure_git
 }
 
 configure_env_to_allow_homebrew_to_work_with_multiple_accounts() {
@@ -99,6 +100,10 @@ configure_go_workspace() {
   mv "$HOME"/go/src/* "$HOME"/Projects
   rm -fr "$HOME"/go/src
   ln -s "$HOME"/Projects "$HOME"/go/src
+}
+
+configure_git() {
+  git config --global core.excludesfile ~/.gitignore_global
 }
 
 main
