@@ -6,7 +6,6 @@
 lpass show --notes dotfilesrc > ~/.dotfilesrc && source ~/.dotfilesrc
 
 main() {
-  configure_env_to_allow_homebrew_to_work_with_multiple_accounts
   configure_ruby
   install_stuff
   configure_vim
@@ -14,27 +13,6 @@ main() {
   install_oh_my_zsh
   configure_go_workspace
   configure_git
-}
-
-configure_env_to_allow_homebrew_to_work_with_multiple_accounts() {
-  local homebrew_directories=( \
-    /usr/local/Cellar	\
-    /usr/local/Homebrew	\
-    /usr/local/var/homebrew	\
-    /usr/local/lib	\
-    /usr/local/share	\
-    /usr/local/etc	\
-    /usr/local/opt \
-    /usr/local/Caskroom	\
-    /usr/local/bin	\
-  )
-
-  for dir in "${homebrew_directories[@]}"
-  do
-    sudo chown -R -H "$(whoami)" "$dir"
-    sudo chown -R "$(whoami)" "$dir"
-    sudo chown -h "$(whoami)" "$dir"
-  done
 }
 
 configure_ruby() {
