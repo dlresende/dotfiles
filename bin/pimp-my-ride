@@ -54,6 +54,7 @@ configure_vim() {
   fi
 
   ( cd "$HOME/.vim" || exit 1
+    git pull
     make install
   )
 }
