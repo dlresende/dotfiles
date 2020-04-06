@@ -30,6 +30,7 @@ brew 'eslint'
 brew 'fontconfig'
 brew 'freetype'
 brew 'fzf'
+brew 'gcc' # required by sbt
 brew 'gd'
 brew 'gdbm'
 brew 'gettext'
