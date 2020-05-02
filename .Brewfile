@@ -23,6 +23,7 @@ brew 'checkstyle' # required by .vim
 brew 'chruby'
 brew 'cmake'
 brew 'coreutils'
+brew 'credhub-cli'
 brew 'direnv'
 brew 'docker'
 brew 'erlang'
