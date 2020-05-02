@@ -103,6 +103,7 @@ export ZSH_DISABLE_COMPFIX=true
 
 # Configure Ruby
 eval "$(rbenv init -)"
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
