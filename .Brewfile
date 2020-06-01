@@ -94,7 +94,7 @@ brew 'tmate'
 brew 'tmux'
 brew 'tree'
 brew 'typescript'
-brew 'universal-ctags', args: ['HEAD']
+brew 'universal-ctags', args: ['HEAD'] # requried by vim/tagbar
 brew 'vim', args: ['with-lua']
 brew 'watch'
 brew 'wget'
