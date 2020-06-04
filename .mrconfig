@@ -1,4 +1,3 @@
-
 [Projects/github.com/dlresende/kata-bowling-game]
 checkout = git clone 'git@github.com:dlresende/kata-bowling-game.git' 'kata-bowling-game'
 
@@ -34,3 +33,12 @@ checkout = git clone 'https://github.com/concourse/concourse-docker.git' 'concou
 
 [Projects/github.com/dlresende/workshop-pipelines-done-right]
 checkout = git clone 'git@github.com:dlresende/workshop-pipelines-done-right.git' 'workshop-pipelines-done-right'
+
+[Projects/github.com/cloudfoundry/bosh]
+checkout = git clone 'git@github.com:cloudfoundry/bosh.git' 'bosh'
+
+[Projects/github.com/cloudfoundry/bosh-cli]
+checkout = git clone 'git@github.com:cloudfoundry/bosh-cli.git' 'bosh-cli'
+
+[Projects/github.com/cloudfoundry/bosh-deployment]
+checkout = git clone 'https://github.com/cloudfoundry/bosh-deployment.git' 'bosh-deployment'
