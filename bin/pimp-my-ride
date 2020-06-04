@@ -90,6 +90,7 @@ configure_go_workspace() {
 
 configure_git() {
   git config --global core.excludesfile ~/.gitignore_global
+  git config --global pull.rebase false
 }
 
 main
