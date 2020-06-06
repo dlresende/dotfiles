@@ -84,6 +84,7 @@ brew 'python3'
 brew 'rbenv'
 brew 'readline'
 brew 'reattach-to-user-namespace'
+brew 'ripgrep'    # required by coc.nvim
 brew 'ruby-install'
 brew 's3cmd'
 brew 'scala'
