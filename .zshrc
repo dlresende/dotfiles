@@ -101,9 +101,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 
 export ZSH_DISABLE_COMPFIX=true
 
-# Configure Ruby
-eval "$(rbenv init -)"
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+[ -f ~/.zprofile ] && source ~/.zprofile
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
