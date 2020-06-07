@@ -38,8 +38,6 @@ install_stuff() {
   update_homebrew || install_homebrew
 
   brew bundle --global
-
-  gem install solargraph
 }
 
 checkout_projects() {
