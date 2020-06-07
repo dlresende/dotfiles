@@ -49,14 +49,7 @@ checkout_projects() {
 }
 
 configure_vim() {
-  if [[ ! -d "$HOME/.vim" ]] ; then
-    git clone https://github.com/dlresende/vimfiles.git ~/.vim
-  fi
-
-  ( cd "$HOME/.vim" || exit 1
-    git pull
-    make install
-  )
+  curl https://vimfiles.diegolemos.net/install | bash
 }
 
 configure_tmux() {
