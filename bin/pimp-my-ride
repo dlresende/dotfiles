@@ -24,6 +24,10 @@ main() {
 
 configure_ruby() {
   rbenv install -s "$(cat ~/.rbenv/version)"
+
+  mkdir -p "$HOME/.gem"
+  lpass show --notes gem_credentials > "$HOME/.gem/credentials"
+  chmod 0600 "$HOME/.gem/credentials"
 }
 
 update_homebrew() {
