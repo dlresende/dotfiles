@@ -38,6 +38,8 @@ install_stuff() {
   update_homebrew || install_homebrew
 
   brew bundle --global
+
+  npm i -g bash-language-server
 }
 
 checkout_projects() {
