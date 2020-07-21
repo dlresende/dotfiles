@@ -90,6 +90,7 @@ brew 'ruby-install'
 brew 's3cmd'
 brew 'scala'
 brew 'sbt'
+brew 'telnet'
 brew 'terraform'  # required by bbl
 brew 'the_silver_searcher'
 brew 'tig'
