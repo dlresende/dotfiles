@@ -61,12 +61,11 @@ brew 'libxml2'
 brew 'libxslt'
 brew 'libyaml'
 brew 'lua'
+brew 'mas'
 brew 'minio'
 brew 'om'
 brew 'oniguruma'
 brew 'openssl'
-brew 'webp'
-brew 'wxmac'
 brew 'pivnet-cli'
 brew 'pmd'
 brew 'postgresql'
@@ -101,7 +100,9 @@ brew 'typescript'
 brew 'universal-ctags', args: ['HEAD'] # requried by vim/tagbar
 brew 'vim', args: ['with-lua']
 brew 'watch'
+brew 'webp'
 brew 'wget'
+brew 'wxmac'
 brew 'yarn' # required by coc.vim
 brew 'zsh'  # required by oh-my-zsh
 
@@ -140,3 +141,5 @@ cask 'vagrant'
 #cask 'virtualbox-extension-pack'
 cask 'vlc'
 cask 'zoomus'
+
+mas 'Xcode', id: 497799835
