@@ -8,7 +8,7 @@ tap 'homebrew/cask-versions'
 tap 'minio/stable'
 tap 'neovim/neovim'
 tap 'universal-ctags/universal-ctags'
-tap 'pivotal-cf/om', 'https://github.com/pivotal-cf/om'
+tap 'pivotal-cf/om'
 
 brew 'ack'
 brew 'autoconf'
