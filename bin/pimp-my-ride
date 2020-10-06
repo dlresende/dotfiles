@@ -15,6 +15,7 @@ export HOMEBREW_NO_ENV_FILTERING=1
 main() {
   configure_ruby
   install_stuff
+  check_rbenv
   configure_vim
   configure_tmux
   install_oh_my_zsh
@@ -28,6 +29,10 @@ configure_ruby() {
   mkdir -p "$HOME/.gem"
   lpass show --notes gem_credentials > "$HOME/.gem/credentials"
   chmod 0600 "$HOME/.gem/credentials"
+}
+
+check_rbenv() {
+  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
 }
 
 update_homebrew() {
