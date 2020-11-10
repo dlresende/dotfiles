@@ -6,8 +6,11 @@ set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
 
-read -p 'LastPass username: ' -r
-lpass login --trust "$REPLY" && lpass sync
+if ! grep -e '^Logged in' <(lpass status) &>/dev/null
+then
+  read -p 'LastPass username: ' -r
+  lpass login --trust "$REPLY" && lpass sync
+fi
 
 # shellcheck disable=SC1090
 lpass show --notes dotfilesrc > "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
@@ -24,6 +27,8 @@ main() {
   install_oh_my_zsh
   configure_go_workspace
   configure_git
+  load_github_key
+  configure_ngrok
 }
 
 configure_ruby() {
@@ -98,6 +103,29 @@ configure_go_workspace() {
 configure_git() {
   git config --global core.excludesfile ~/.gitignore_global
   git config --global pull.rebase false
+}
+
+ssh_add() {
+  local key="${1:?}"
+  local key_file
+  key_file="$(mktemp)"
+  echo "$key" > "$key_file"
+  chmod 0600 "$key_file"
+  ssh-add "$key_file"
+}
+
+load_github_key() {
+  echo "Loading Github key..."
+  ssh_add "$(lpass show --notes Github | yq -r .ssh_key)"
+}
+
+load_bitbucket_key() {
+  echo "Loading Bitbucket key..."
+  ssd_add "$(lpass show --notes Business/Atlassian | yq -r .bitbucket.private_key)"
+}
+
+configure_ngrok() {
+  lpass show --notes 'ngrok.com' > "$HOME/.ngrok2/ngrok.yml"
 }
 
 main
