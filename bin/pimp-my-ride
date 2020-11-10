@@ -6,8 +6,11 @@ set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
 
+read -p 'LastPass username: ' -r
+lpass login --trust "$REPLY" && lpass sync
+
 # shellcheck disable=SC1090
-lpass show --notes dotfilesrc > ~/.dotfilesrc && source ~/.dotfilesrc
+lpass show --notes dotfilesrc > "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
 
 # https://github.com/Homebrew/homebrew-cask/issues/42142
 export HOMEBREW_NO_ENV_FILTERING=1
