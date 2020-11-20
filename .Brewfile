@@ -32,6 +32,7 @@ brew 'gcc' # required by sbt
 brew 'gd'
 brew 'gdbm'
 brew 'gettext'
+brew 'gh'
 brew 'ghc'
 brew 'git'
 brew 'git-crypt'
