@@ -7,6 +7,7 @@ tap 'minio/stable'
 tap 'neovim/neovim'
 tap 'universal-ctags/universal-ctags'
 tap 'pivotal-cf/om'
+tap 'zegervdv/zathura'
 
 brew 'ack'
 brew 'autoconf'
@@ -102,6 +103,8 @@ brew 'wget'
 brew 'wxmac'
 brew 'yarn' # required by coc.vim
 brew 'zsh'  # required by oh-my-zsh
+brew 'zathura'  # required by coc-texlab
+brew 'zathura-pdf-poppler'  # required by coc-texlab
 
 cask 'android-platform-tools'
 cask 'caffeine'
@@ -123,6 +126,7 @@ cask 'java'
 cask 'java8'
 cask 'keybase'
 cask 'libreoffice'
+cask 'mactex' # required by texlab
 cask 'ngrok'
 cask 'no-ip-duc'
 cask 'prey'
