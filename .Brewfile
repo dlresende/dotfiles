@@ -133,6 +133,7 @@ cask 'prey'
 cask 'protonmail-bridge'
 cask 'slack'
 cask 'shiftit'
+cask 'skim' # required by coc-texlab
 cask 'skype'
 cask 'spotify'
 cask 'thunderbird'
