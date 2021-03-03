@@ -44,11 +44,17 @@ check_rbenv() {
 }
 
 update_homebrew() {
-  brew -h > /dev/null 2>&1 && brew update
+  if command -v 'brew' > /dev/null;
+  then
+    brew update -v
+  fi
 }
 
 install_homebrew() {
-  brew -h > /dev/null 2>&1 || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  if ! command -v 'brew' > /dev/null;
+  then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
 }
 
 install_stuff() {
