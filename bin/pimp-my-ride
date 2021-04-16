@@ -9,7 +9,7 @@ set -o pipefail # fail if any component of any pipe fails
 if ! grep -e '^Logged in' <(lpass status) &>/dev/null
 then
   read -p 'LastPass username: ' -r
-  lpass login --trust "$REPLY" && lpass sync
+  ( lpass login --trust "$REPLY" && lpass sync ) || exit 1
 fi
 
 # shellcheck disable=SC1090
