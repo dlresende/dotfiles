@@ -15,9 +15,6 @@ fi
 # shellcheck disable=SC1090
 lpass show --notes dotfilesrc > "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
 
-# https://github.com/Homebrew/homebrew-cask/issues/42142
-export HOMEBREW_NO_ENV_FILTERING=1
-
 main() {
   configure_ruby
   install_stuff
