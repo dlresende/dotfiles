@@ -145,6 +145,6 @@ cask 'vagrant'
 #cask 'virtualbox'
 #cask 'virtualbox-extension-pack'
 cask 'vlc'
-cask 'zoomus'
+cask 'zoom'
 
 mas 'Xcode', id: 497799835
