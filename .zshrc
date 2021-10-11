@@ -105,5 +105,8 @@ export ZSH_DISABLE_COMPFIX=true
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# In zsh you need to edit a PROMPT variable in your theme instead of PS1
+PROMPT="; "
+
 # added by travis gem
 [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
