@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Configure Go
+export GOPATH="${HOME}/go"
+export PATH="${GOPATH}/bin:${PATH}"
+
+# Configure Java
+JAVA_HOME="$(/usr/libexec/java_home)"
+export JAVA_HOME
+export PATH="${JAVA_HOME}/bin:${PATH}"
+
+# Configure Ruby/rbenv
+export PATH="${HOME}/.rbenv/shims:${PATH}"
