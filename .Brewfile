@@ -144,6 +144,7 @@ cask 'shiftit'
 cask 'skim' # required by coc-texlab
 cask 'skype'
 cask 'spotify'
+cask 'telegram-desktop'
 cask 'thunderbird'
 cask 'tor-browser'
 cask 'vagrant'
