@@ -9,5 +9,5 @@ done
 unset file
 
 # Configure Prompt
-PS1="; "
+PS1="\n; "
 
