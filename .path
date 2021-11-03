@@ -11,3 +11,6 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Configure Ruby/rbenv
 export PATH="${HOME}/.rbenv/shims:${PATH}"
+
+# Add homedir binaries
+export PATH="${HOME}/bin:${PATH}"
