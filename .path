@@ -9,8 +9,12 @@ JAVA_HOME="$(/usr/libexec/java_home)"
 export JAVA_HOME
 export PATH="${JAVA_HOME}/bin:${PATH}"
 
+# Add homedir binaries
+export PATH="${HOME}/bin:${PATH}"
+
+# Add Homebrew's "sbin". Some formulae put executables in /usr/local/sbin.
+export PATH="/usr/local/sbin:$PATH"
+
 # Configure Ruby/rbenv
 export PATH="${HOME}/.rbenv/shims:${PATH}"
 
-# Add homedir binaries
-export PATH="${HOME}/bin:${PATH}"
