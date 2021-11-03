@@ -2,7 +2,7 @@
 
 [[ -z "$DEBUG" ]] || set -x
 
-# set -e # bail out early if any command fails
+set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
 
@@ -13,7 +13,7 @@ then
 fi
 
 # shellcheck disable=SC1090
-lpass show --notes dotfilesrc > "$HOME/.dotfilesrc" && source "$HOME/.dotfilesrc"
+lpass show --notes dotfilesrc > "${HOME}/.dotfilesrc" && source "${HOME}/.dotfilesrc"
 
 main() {
   configure_ruby
@@ -21,8 +21,6 @@ main() {
   check_rbenv
   configure_vim
   configure_tmux
-  install_oh_my_zsh
-  configure_go_workspace
   configure_git
   load_github_key
   configure_ngrok
@@ -37,7 +35,7 @@ configure_ruby() {
 }
 
 check_rbenv() {
-  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/main/bin/rbenv-doctor | bash
 }
 
 update_homebrew() {
@@ -59,7 +57,8 @@ install_stuff() {
 
   brew bundle --global
 
-  npm i -g bash-language-server
+  npm i -g bash-language-server &&
+    npm update -g
 }
 
 checkout_projects() {
@@ -86,11 +85,6 @@ configure_tmux() {
     ( cd "$TMUX_PLUGIN_MANAGER_PATH/tpm" && git pull )
     "$TMUX_PLUGIN_MANAGER_PATH"/tpm/bin/update_plugins all
   fi
-}
-
-install_oh_my_zsh() {
-  # ZSH='' sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/upgrade.sh)"
 }
 
 configure_go_workspace() {
