@@ -19,6 +19,9 @@ export LC_ALL="en_GB.UTF-8";
 RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 export RUBY_CONFIGURE_OPTS
 
+# rbenv
+export RBENV_SHELL=bash
+
 # Disable Apple's warning about bash deprecation
 # https://support.apple.com/en-gb/HT208050
 export BASH_SILENCE_DEPRECATION_WARNING=1
