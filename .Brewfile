@@ -139,6 +139,7 @@ cask 'no-ip-duc'
 cask 'prey'
 cask 'protonmail-bridge'
 cask 'protonvpn'
+cask 'signal'
 cask 'slack'
 cask 'shiftit'
 cask 'skim' # required by coc-texlab
