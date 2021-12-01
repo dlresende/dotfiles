@@ -8,6 +8,9 @@ for file in ~/.{aliases,path,exports,completions,dotfiles,functions}; do
 done
 unset file
 
+# Unleash direnv
+eval "$(direnv hook bash)"
+
 # Configure Prompt
 PS1="\n; "
 
