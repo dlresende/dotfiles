@@ -16,13 +16,13 @@ fi
 lpass show --notes dotfilesrc > "${HOME}/.dotfilesrc" && source "${HOME}/.dotfilesrc"
 
 main() {
+  load_github_key
   configure_ruby
   install_stuff
   check_rbenv
   configure_vim
   configure_tmux
   configure_git
-  load_github_key
   configure_ngrok
 }
 
