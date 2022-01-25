@@ -25,3 +25,6 @@ export RBENV_SHELL=bash
 # Disable Apple's warning about bash deprecation
 # https://support.apple.com/en-gb/HT208050
 export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# Larger bash history (allow 32³ entries; default is 500)
+export HISTSIZE=50000000;
