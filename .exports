@@ -28,3 +28,6 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # Larger bash history (allow 32³ entries; default is 500)
 export HISTSIZE=50000000;
+
+# Fix 'Error opening terminal: tmux-256color'
+export TERM=xterm-256color
