@@ -114,6 +114,7 @@ brew 'zathura'  # required by coc-texlab
 brew 'zathura-pdf-poppler'  # required by coc-texlab
 
 cask 'android-platform-tools'
+cask 'android-studio'
 cask 'caffeine'
 cask 'coconutbattery'
 cask 'cozy-drive'
