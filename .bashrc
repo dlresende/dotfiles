@@ -12,8 +12,5 @@ unset file
 # Enable direnv
 eval "$(direnv hook bash)"
 
-# Configure Prompt
-PS1="\n; "
-
 # Append to the history file instead of overwriting 
 shopt -s histappend
