@@ -5,10 +5,11 @@
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
+    set -x
 
 ( cd "$HOME" || exit 1
   
-  if ! command -v git
+  if ! command -v git 2>&1 >/dev/null
   then
     >&2 cat <<EOF
     git is not present in PATH. You should make sure git is installed and
@@ -23,7 +24,8 @@ EOF
   else
     git init
     git remote add origin https://github.com/dlresende/dotfiles.git
-    git pull origin macOS
+    git fetch --all
+    git reset --hard origin/macOS
   fi
 
   ./bin/pimp-my-ride
