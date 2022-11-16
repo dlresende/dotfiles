@@ -46,7 +46,7 @@ brew 'gron'
 brew 'helm'
 brew 'htop'
 brew 'ipcalc'
-brew 'java'
+brew 'java' unless system "/usr/libexec/java_home --failfast"
 brew 'jemalloc'
 brew 'jmeter'
 brew 'jq'
@@ -102,11 +102,10 @@ brew 'tree'
 brew 'typescript'
 brew 'universal-ctags', args: ['HEAD'] # requried by vim/tagbar
 brew 'velero'
-brew 'vim', args: ['with-lua']
+brew 'vim'
 brew 'watch'
 brew 'webp'
 brew 'wget'
-brew 'wxmac'
 brew 'yarn' # required by coc.vim
 brew 'zsh'  # required by oh-my-zsh
 brew 'zathura'  # required by coc-texlab
@@ -123,11 +122,9 @@ cask 'firefox'
 cask 'flux'
 cask 'fly'
 cask 'flycut'
-cask 'font-inconsolata'
 cask 'google-chrome'
 cask 'google-cloud-sdk'
 cask 'google-drive-file-stream'
-cask 'intellij-idea'
 cask 'iterm2'
 cask 'keybase'
 cask 'libreoffice'

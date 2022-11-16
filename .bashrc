@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Load dotfiles
-for file in ~/.{aliases,path,exports,completions,dotfiles,functions}; do
+for file in ~/.{aliases,path,exports,completions,dotfilesrc,functions}; do
 	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
 		# shellcheck source=/dev/null
 		source "$file"

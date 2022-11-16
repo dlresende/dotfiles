@@ -2,54 +2,23 @@
 
 [[ -z "$DEBUG" ]] || set -x
 
-set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
 
-if ! grep -e '^Logged in' <(lpass status) &>/dev/null
-then
-  read -p 'LastPass username: ' -r
-  ( lpass login --trust "$REPLY" && lpass sync ) || exit 1
-fi
-
-# shellcheck disable=SC1090
-lpass show --notes dotfilesrc > "${HOME}/.dotfilesrc" && source "${HOME}/.dotfilesrc"
-
 main() {
-  load_github_key
-  configure_ruby
+  get_secret 'dotfilesrc' "${HOME}/.dotfilesrc"
+  switch_to_bash
   install_stuff
-  check_rbenv
+  configure_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
   configure_ngrok
+  checkout_projects
 }
 
-configure_ruby() {
-  rbenv install -s "$(cat ~/.rbenv/version)"
-
-  mkdir -p "$HOME/.gem"
-  lpass show --notes gem_credentials > "$HOME/.gem/credentials"
-  chmod 0600 "$HOME/.gem/credentials"
-}
-
-check_rbenv() {
-  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/main/bin/rbenv-doctor | bash
-}
-
-update_homebrew() {
-  if command -v 'brew' > /dev/null;
-  then
-    brew update -v
-  fi
-}
-
-install_homebrew() {
-  if ! command -v 'brew' > /dev/null;
-  then
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  fi
+switch_to_bash() {
+  [ "$SHELL" = '/bin/bash' ] || chsh -s /bin/bash
 }
 
 install_stuff() {
@@ -61,12 +30,23 @@ install_stuff() {
     npm update -g
 }
 
-checkout_projects() {
-  mkdir -p "$HOME/Projects"
+update_homebrew() {
+  command -v 'brew' &> /dev/null && brew update -v
+}
 
-  ( cd "$HOME" || exit 1
-    mr update
-  )
+install_homebrew() {
+   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+}
+
+configure_ruby() {
+  rbenv install --list | grep 2.7 > ~/.rbenv/version
+  rbenv install -s "$(cat ~/.rbenv/version)"
+
+  get_secret 'gem_credentials' "$HOME/.gem/credentials"
+}
+
+check_rbenv() {
+  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/main/bin/rbenv-doctor | bash
 }
 
 configure_vim() {
@@ -123,7 +103,37 @@ load_bitbucket_key() {
 }
 
 configure_ngrok() {
-  lpass show --notes 'ngrok.com' > "$HOME/.ngrok2/ngrok.yml"
+  get_secret 'ngrok.com' "$HOME/.ngrok2/ngrok.yml"
+}
+
+checkout_projects() {
+  load_github_key
+  load_bitbucket_key
+
+  mkdir -p "$HOME/Projects"
+
+  ( cd "$HOME" || exit 1
+    mr update
+  )
+}
+
+get_secret() {
+  local key="${1:?}"
+  local destination="${2:?}"
+
+  log_into_lpass
+
+  mkdir -p "$(dirname ${destination})"
+  lpass show --notes "$key" > "$destination"
+  chmod 0600 "$destination"
+}
+
+log_into_lpass() {
+  if ! grep -e '^Logged in' <(lpass status) &>/dev/null
+  then
+    read -p 'LastPass username: ' -r
+    ( lpass login --trust "$REPLY" && lpass sync ) || exit 1
+  fi
 }
 
 main
