@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 
-[[ -z "$DEBUG" ]] || set -x
+: "${SKIP_SECRETS:=}"
+: "${DEBUG:=}"
 
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
 
+[[ -z "$DEBUG" ]] || set -x
+
 main() {
-  get_secret 'dotfilesrc' "${HOME}/.dotfilesrc"
   switch_to_bash
   install_stuff
   configure_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
-  configure_ngrok
-  checkout_projects
+
+  if [ -z "$SKIP_SECRETS" ]
+  then
+    configure_secrets
+    checkout_projects
+  fi
 }
 
 switch_to_bash() {
@@ -22,27 +28,31 @@ switch_to_bash() {
 }
 
 install_stuff() {
-  update_homebrew || install_homebrew
+  local noise_level
 
-  brew bundle --global
+  if [ -z "$DEBUG" ]
+  then
+    noise_level='--quiet'
+  else
+    noise_level='--debug'
+  fi
+
+  if command -v 'brew' &> /dev/null
+  then
+    brew update "$noise_level"
+  else
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  brew bundle --global "$noise_level"
 
   npm i -g bash-language-server &&
     npm update -g
 }
 
-update_homebrew() {
-  command -v 'brew' &> /dev/null && brew update -v
-}
-
-install_homebrew() {
-   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-}
-
 configure_ruby() {
   rbenv install --list | grep 2.7 > ~/.rbenv/version
   rbenv install -s "$(cat ~/.rbenv/version)"
-
-  get_secret 'gem_credentials' "$HOME/.gem/credentials"
 }
 
 check_rbenv() {
@@ -50,7 +60,7 @@ check_rbenv() {
 }
 
 configure_vim() {
-  curl -s https://vimfiles.diegolemos.net/install | bash
+  curl -fsSL https://vimfiles.diegolemos.net/install | bash
 }
 
 configure_tmux() {
@@ -71,6 +81,7 @@ configure_go_workspace() {
   if [[ -L "$HOME"/go/src && -d "$HOME"/go/src ]]
   then
     echo "Go workspace already configured. Moving on."
+    return
   fi
 
   mv "$HOME"/go/src/* "$HOME"/Projects
@@ -102,18 +113,20 @@ load_bitbucket_key() {
   ssh_add "$(lpass show --notes Business/Atlassian | yq -r .bitbucket.private_key)"
 }
 
-configure_ngrok() {
-  get_secret 'ngrok.com' "$HOME/.ngrok2/ngrok.yml"
-}
-
 checkout_projects() {
-  load_github_key
-  load_bitbucket_key
-
   mkdir -p "$HOME/Projects"
 
+  local noise_level
+
+  if [ -z "$DEBUG" ]
+  then
+    noise_level='--quiet'
+  else
+    noise_level='--verbose'
+  fi
+
   ( cd "$HOME" || exit 1
-    mr update
+    mr "$noise_level" update
   )
 }
 
@@ -134,6 +147,15 @@ log_into_lpass() {
     read -p 'LastPass username: ' -r
     ( lpass login --trust "$REPLY" && lpass sync ) || exit 1
   fi
+}
+
+configure_secrets() {
+  load_github_key
+  load_bitbucket_key
+
+  get_secret 'dotfilesrc' "${HOME}/.dotfilesrc"
+  get_secret 'ngrok.com' "$HOME/.ngrok2/ngrok.yml"
+  get_secret 'gem_credentials' "$HOME/.gem/credentials"
 }
 
 main
