@@ -99,7 +99,7 @@ load_github_key() {
 
 load_bitbucket_key() {
   echo "Loading Bitbucket key..."
-  ssd_add "$(lpass show --notes Business/Atlassian | yq -r .bitbucket.private_key)"
+  ssh_add "$(lpass show --notes Business/Atlassian | yq -r .bitbucket.private_key)"
 }
 
 configure_ngrok() {
