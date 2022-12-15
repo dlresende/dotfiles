@@ -1,8 +1,23 @@
 #!/usr/bin/env bash
 
-# Configure Go
-export GOPATH="${HOME}/go"
-export PATH="${GOPATH}/bin:${PATH}"
+# Configure Go. See go env for a full list of environment variables.
+
+# This is the location of the Go installation. It is used to find the standard
+# libraries.
+GOROOT="$(brew --prefix golang)/libexec"
+
+# The directory where go install and go get will place binaries after building
+# main packages. Generally this is set to somewhere on the system PATH so that
+# installed binaries can be run and discovered easily.
+GOBIN="${GOROOT}/bin"
+
+# GOPATH is a variable that defines the root of the workspace. The go get tool
+# downloads packages to the first directory in GOPATH.
+GOPATH="${HOME}/go"
+
+PATH="${GOPATH}/bin:${PATH}"
+
+export GOROOT GOBIN GOPATH PATH
 
 # Configure Java
 JAVA_HOME="$(/usr/libexec/java_home)"
@@ -13,10 +28,7 @@ export PATH="${JAVA_HOME}/bin:${PATH}"
 export PATH="${HOME}/bin:${PATH}"
 
 # Add Homebrew's "sbin". Some formulae put executables in /usr/local/sbin.
-#export PATH="/usr/local/sbin:$PATH"
-
-# Add homebrew binaries to PATH
-export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/usr/local/sbin:${PATH}"
 
 # Configure Ruby/rbenv
 export PATH="${HOME}/.rbenv/shims:${PATH}"
