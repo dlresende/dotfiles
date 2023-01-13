@@ -104,6 +104,7 @@ brew 'tmux'
 brew 'tree'
 brew 'typescript'
 brew 'universal-ctags', args: ['HEAD'] # requried by vim/tagbar
+brew 'vault'
 brew 'velero'
 brew 'vim'
 brew 'watch'
