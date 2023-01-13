@@ -114,6 +114,7 @@ brew 'zsh'  # required by oh-my-zsh
 brew 'zathura'  # required by coc-texlab
 brew 'zathura-pdf-poppler'  # required by coc-texlab
 
+cask 'adobe-acrobat-reader'
 cask 'android-platform-tools'
 cask 'android-studio'
 cask 'caffeine'
