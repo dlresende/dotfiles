@@ -19,7 +19,6 @@ main() {
   if [ -z "$SKIP_SECRETS" ]
   then
     configure_secrets
-    checkout_projects
   fi
 }
 
@@ -125,23 +124,6 @@ load_bitbucket_key() {
 
   echo "Loading Bitbucket key..."
   ssh_add "$(lpass show --notes Business/Atlassian | yq -r .bitbucket.private_key)"
-}
-
-checkout_projects() {
-  mkdir -p "$HOME/Projects"
-
-  local noise_level
-
-  if [ -z "$DEBUG" ]
-  then
-    noise_level='--quiet'
-  else
-    noise_level='--verbose'
-  fi
-
-  ( cd "$HOME" || exit 1
-    mr "$noise_level" update
-  )
 }
 
 get_secret() {
