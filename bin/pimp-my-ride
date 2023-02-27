@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
-: "${SKIP_SECRETS:=}"
 : "${DEBUG:=}"
 
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
 
 [[ -z "$DEBUG" ]] || set -x
+
+# shellcheck disable=1091
+. "${HOME}/.dotfilesrc"
 
 main() {
   switch_to_bash
@@ -15,11 +17,6 @@ main() {
   configure_vim
   configure_tmux
   configure_git
-
-  if [ -z "$SKIP_SECRETS" ]
-  then
-    configure_secrets
-  fi
 }
 
 switch_to_bash() {
@@ -91,67 +88,6 @@ configure_go_workspace() {
 configure_git() {
   git config --global core.excludesfile ~/.gitignore_global
   git config --global pull.rebase false
-}
-
-ssh_add() {
-  local key="${1:?}"
-  local key_file
-  key_file="$(mktemp)"
-  echo "$key" > "$key_file"
-  chmod 0600 "$key_file"
-  ssh-add "$key_file"
-}
-
-load_github_key() {
-  local msg
-  msg="$(ssh -T git@github.com 2>&1)"
-
-  if [[ "$msg" =~ .*"You've successfully authenticated".* ]]; then
-    return
-  fi
-
-  echo "Loading Github key..."
-  ssh_add "$(lpass show --notes Github | yq -r .ssh_key)"
-}
-
-load_bitbucket_key() {
-  local msg
-  msg="$(ssh -T git@bitbucket.org -o StrictHostKeyChecking=no 2>&1)"
-
-  if [[ "$msg" =~ .*'authenticated via ssh key'.* ]]; then
-    return
-  fi
-
-  echo "Loading Bitbucket key..."
-  ssh_add "$(lpass show --notes Business/Atlassian | yq -r .bitbucket.private_key)"
-}
-
-get_secret() {
-  local key="${1:?}"
-  local destination="${2:?}"
-
-  log_into_lpass
-
-  mkdir -p "$(dirname ${destination})"
-  lpass show --notes "$key" > "$destination"
-  chmod 0600 "$destination"
-}
-
-log_into_lpass() {
-  if ! grep -e '^Logged in' <(lpass status) &>/dev/null
-  then
-    read -p 'LastPass username: ' -r
-    ( lpass login --trust "$REPLY" && lpass sync ) || exit 1
-  fi
-}
-
-configure_secrets() {
-  load_github_key
-  load_bitbucket_key
-
-  get_secret 'dotfilesrc' "${HOME}/.dotfilesrc"
-  get_secret 'ngrok.com' "$HOME/.ngrok2/ngrok.yml"
-  get_secret 'gem_credentials' "$HOME/.gem/credentials"
 }
 
 main
