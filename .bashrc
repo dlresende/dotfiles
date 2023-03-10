@@ -14,3 +14,6 @@ eval "$(direnv hook bash)"
 
 # Append to the history file instead of overwriting 
 shopt -s histappend
+
+# Enable Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
