@@ -111,6 +111,7 @@ brew 'watch'
 brew 'webp'
 brew 'wget'
 brew 'yarn' # required by coc.vim
+brew 'ytt'
 brew 'zsh'  # required by oh-my-zsh
 brew 'zathura'  # required by coc-texlab
 brew 'zathura-pdf-poppler'  # required by coc-texlab
