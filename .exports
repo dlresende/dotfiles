@@ -29,8 +29,8 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # Larger bash history (allow 32³ entries; default is 500)
 export HISTSIZE=50000000;
 
-# Do not add commands starting with space to the history
-export HISTIGNORE=' *'
+# Do not add commands starting with space, cd or ls to the history
+export HISTIGNORE=' *:cd*:ls*'
 
 # Fix 'Error opening terminal: tmux-256color'
 export TERM=xterm-256color
