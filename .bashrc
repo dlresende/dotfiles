@@ -16,4 +16,4 @@ eval "$(direnv hook bash)"
 shopt -s histappend
 
 # Enable Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(brew shellenv)"
