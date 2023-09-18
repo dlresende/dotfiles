@@ -7,9 +7,6 @@ set -o pipefail # fail if any component of any pipe fails
 
 [[ -z "$DEBUG" ]] || set -x
 
-# shellcheck disable=1091
-. "${HOME}/.dotfilesrc"
-
 main() {
   switch_to_bash
   install_stuff
