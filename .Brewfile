@@ -132,7 +132,6 @@ cask 'flycut'
 cask 'google-cloud-sdk'
 cask 'google-drive-file-stream'
 cask 'iterm2'
-cask 'keybase'
 cask 'libreoffice'
 cask 'mactex' # required by texlab
 cask 'ngrok'
