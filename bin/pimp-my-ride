@@ -10,7 +10,7 @@ set -o pipefail # fail if any component of any pipe fails
 main() {
   switch_to_bash
   install_stuff
-  configure_ruby && check_rbenv
+  install_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
@@ -43,9 +43,8 @@ install_stuff() {
     npm update -g
 }
 
-configure_ruby() {
-  rbenv install --list | grep 2.7 > ~/.rbenv/version
-  rbenv install -s "$(cat ~/.rbenv/version)"
+install_ruby() {
+  rbenv install --skip-existing $(rbenv install -l | grep -v - | tail -1)
 }
 
 check_rbenv() {
