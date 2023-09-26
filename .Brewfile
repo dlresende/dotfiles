@@ -81,7 +81,7 @@ brew 'openldap'
 brew 'om'
 brew 'oniguruma'
 brew 'openssl'
-#brew 'pivnet-cli'  # Waiting on https://github.com/pivotal-legacy/homebrew-tap/pull/191
+brew 'pivnet-cli'
 brew 'pmd'
 brew 'python'
 brew 'python-yq'
