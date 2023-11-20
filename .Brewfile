@@ -42,7 +42,7 @@ brew 'git'
 brew 'git-crypt'
 brew 'git-duet'
 brew 'go'
-brew 'gopls'
+brew 'gopls'  # used by coc.nvim
 brew 'gradle'
 brew 'graphviz'
 brew 'gron'
