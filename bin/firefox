@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+( cd "$(mktemp -d)" || exit 1
+  nohup /Applications/Firefox.app/Contents/MacOS/firefox -P &
+)
