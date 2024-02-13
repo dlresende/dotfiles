@@ -128,7 +128,7 @@ cask 'fly'
 cask 'flycut'
 #cask 'google-chrome' # comes pre-installed
 cask 'google-cloud-sdk'
-cask 'google-drive-file-stream'
+cask 'google-drive'
 cask 'iterm2'
 cask 'libreoffice'
 cask 'mactex' # required by texlab
