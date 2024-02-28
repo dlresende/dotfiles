@@ -1,0 +1,12 @@
+[aliases]
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+[core]
+  excludesfile = $HOME/.gitignore_global
+[pull]
+  rebase = false
