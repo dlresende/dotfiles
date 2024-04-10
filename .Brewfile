@@ -136,7 +136,6 @@ cask 'ngrok'
 cask 'no-ip-duc'
 cask 'protonmail-bridge'
 cask 'protonvpn'
-cask 'signal'
 #cask 'slack' # comes pre-installed
 cask 'skim' # required by coc-texlab
 cask 'skype'
