@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# vim: set ft=shell
+# vim: set foldmethod=indent
+
+[ -z "$DEBUG" ] || set -x
+
+set -euo pipefail
+
+main() {
+  check_params $#
+
+  local lp_folder="${1}"
+  local vault_path="${2}"
+
+  check_commands_exist \
+    lpass \
+    vault \
+
+  check_lastpass_login
+  check_vault_login
+
+  migrate "$lp_folder" "$vault_path"
+}
+
+panic() {
+  local message="${1:?}"
+
+  echo 2>&1 "Error: $message"
+  exit 1
+}
+
+usage() {
+  echo "Usage: $0 <Last Pass folder to be migrated> <Vault path serving as a destination>"
+}
+
+check_params() {
+  local nb_of_params="${1:?}"
+
+  if [ $nb_of_params -ne 2 ]
+  then
+    panic "$(usage)"
+  fi
+}
+
+check_commands_exist() {
+  local cmd="${1:?}"
+
+  if ! command -v "$cmd" > /dev/null
+  then
+    panic "Command '$cmd' required but not found in \$PATH."
+  fi
+}
+
+check_lastpass_login() {
+  if ! grep -e '^Logged in' <(lpass status) &>/dev/null
+  then
+    panic 'It seems we are not logged into Last Pass. To log in do: `lpass login USERNAME`.'
+  fi
+}
+
+check_vault_login() {
+  if ! vault token lookup &> /dev/null
+  then
+    panic 'It seems we are not logged into Vault. To log in do: `vault login`.'
+  fi
+}
+
+migrate() {
+  local lp_folder="${1:?}"
+  local vault_path="${2:?}"
+
+  lpass show --basic-regexp '.*' --json _ | \
+    jq -r " map(
+              select(.share == \"${lp_folder}\")
+            ) | reduce .[] as \$item (
+              [];
+              \$item.name as \$name |
+                \$item.group as \$group |
+                if ( (\$name) != \"\" and (\$group) != \"\" )
+                then
+                  . + [[ 
+                        \$group, 
+                        \$name, 
+                        ( \$item |
+                          del(.last_modified_gmt) |
+                          del(.last_touch) |
+                          del(.id) |
+                          del(.fullname) |
+                          del(.name) |
+                          del(.group) |
+                          del(.share ) |
+                          tostring
+                        )
+                      ]]
+                else
+                  .
+                end
+            ) | .[] | @tsv"  |
+    while IFS=$'\t' read group name json
+    do
+      tmp=$(mktemp)
+      trap "rm -f $tmp" EXIT
+      echo "$json" > "$tmp"
+      vault kv put -format=json "${vault_path}/${group/\\/\/}/${name}" @${tmp} > /dev/null
+    done
+}
+
+main "$@"
