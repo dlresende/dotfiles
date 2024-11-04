@@ -131,10 +131,10 @@ cask 'iterm2'
 cask 'libreoffice'
 cask 'mactex' # required by texlab
 cask 'nextcloud'
-cask 'ngrok'
-cask 'no-ip-duc'
-cask 'protonmail-bridge'
-cask 'protonvpn'
+#cask 'ngrok'
+#cask 'no-ip-duc'
+#cask 'protonmail-bridge'
+#cask 'protonvpn'
 #cask 'slack' # comes pre-installed
 cask 'skim' # required by coc-texlab
 cask 'skype'
