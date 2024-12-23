@@ -15,24 +15,27 @@
 #GOBIN="${GOROOT}/bin"
 #export GOBIN
 
+export PATH
+
+# Add Homebrew's "sbin". Some formulae put executables in /usr/local/sbin.
+PATH="/opt/homebrew/bin:/usr/local/sbin:${PATH}"
+
 # GOPATH is a variable that defines the root of the workspace. The go get tool
 # downloads packages to the first directory in GOPATH.
 GOPATH="${HOME}/go"
 export GOPATH
 
 PATH="${GOPATH}/bin:${PATH}"
-export PATH
 
 # Configure Java
 JAVA_HOME="$(/usr/libexec/java_home)"
 export JAVA_HOME
-export PATH="${JAVA_HOME}/bin:${PATH}"
+
+PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Add homedir binaries
-export PATH="${HOME}/bin:${PATH}"
-
-# Add Homebrew's "sbin". Some formulae put executables in /usr/local/sbin.
-export PATH="/opt/homebrew/bin:/usr/local/sbin:${PATH}"
+PATH="${HOME}/bin:${PATH}"
 
 # Configure Ruby/rbenv
-export PATH="${HOME}/.rbenv/shims:${PATH}"
+PATH="${HOME}/.rbenv/shims:${PATH}"
+
