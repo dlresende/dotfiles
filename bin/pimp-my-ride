@@ -38,9 +38,6 @@ install_stuff() {
   fi
 
   brew bundle --global "$noise_level"
-
-  npm i -g bash-language-server &&
-    npm update -g
 }
 
 install_ruby() {
