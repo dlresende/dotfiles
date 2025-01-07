@@ -33,11 +33,13 @@ install_stuff() {
   if command -v 'brew' &> /dev/null
   then
     brew update "$noise_level"
+    brew upgrade "$noise_level"
   else
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 
   brew bundle --global "$noise_level"
+  brew cleanup "$noise_level"
 }
 
 install_ruby() {
