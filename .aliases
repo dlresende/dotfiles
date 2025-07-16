@@ -1,0 +1,4 @@
+# vim: ft=bash
+# vim: foldmethod=indent
+
+alias delete_branches='cleanup_branches'

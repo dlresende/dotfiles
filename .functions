@@ -1,3 +1,21 @@
 # vim: ft=bash
 # vim: foldmethod=indent
 
+cleanup_branches() {
+  local current
+  current="$( git branch --show-current )"
+
+  read -p "Do you want to delete all branches except \"${current}\" [y/N]: " -r confirmation
+
+  case "$confirmation" in
+    'y'|'Y')
+      for branch in $( git branch | grep '^ ' )
+      do
+        git branch -D "$branch"
+      done
+      ;;
+    *)
+      echo "Aborting..."
+      ;;
+  esac
+}
