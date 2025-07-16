@@ -10,10 +10,16 @@ done
 unset file
 
 # Enable direnv
-eval "$(direnv hook bash)"
+if command -v direnv > /dev/null
+then
+  eval "$(direnv hook bash)"
+fi
 
 # Append to the history file instead of overwriting 
 shopt -s histappend
 
 # Enable Homebrew
-eval "$(brew shellenv)"
+if command -v brew > /dev/null
+then
+  eval "$(brew shellenv)"
+fi
