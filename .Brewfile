@@ -95,6 +95,8 @@ brew 'ruby-install'
 brew 's3cmd'
 brew 'scala'
 brew 'sbt'
+brew 'shellcheck' # used by vim in conjunction with bash-language-server
+brew 'tanzu-cli'
 brew 'telnet'
 brew 'terraform'  # required by bbl
 brew 'the_silver_searcher'
