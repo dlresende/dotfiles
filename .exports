@@ -39,3 +39,5 @@ export TERM=xterm-256color
 # becomes easier (stolen from
 # https://twitter.com/thingskatedid/status/1316081075043463170?s=20&t=nDiwAgT_DL7B30QuV0vnPQ)
 export PS1="\n\$([ \$? -gt 0 ] && printf '\[\033[31m\]'; printf '; \[\033[0m\]')"
+
+export HOMEBREW_BUNDLE_FILE="${HOME}/.Brewfile"
