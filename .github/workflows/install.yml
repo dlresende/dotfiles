@@ -8,4 +8,4 @@ jobs:
     runs-on: 	macos-latest
     steps:
       - uses: actions/checkout@v3
-      - run: DEBUG=1 SKIP_SECRETS=1 ./bin/install
+      - run: source .bashrc && DEBUG=1 ./bin/install
