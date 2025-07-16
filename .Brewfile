@@ -98,8 +98,6 @@ brew 'webp'
 brew 'wget'
 brew 'yarn' # required by coc.vim
 brew 'ytt'
-brew 'zathura'  # required by coc-texlab
-brew 'zathura-pdf-poppler'  # required by coc-texlab
 
 cask 'adobe-acrobat-reader'
 cask 'android-platform-tools'
@@ -111,9 +109,7 @@ cask 'flycut'
 cask 'google-cloud-sdk'
 cask 'iterm2'
 cask 'libreoffice'
-cask 'mactex' # required by texlab
 cask 'nextcloud'
-cask 'skim' # required by coc-texlab
 cask 'thunderbird'
 cask 'vlc'
 
