@@ -113,4 +113,4 @@ cask 'nextcloud'
 cask 'thunderbird'
 cask 'vlc'
 
-mas 'Xcode', id: 497799835
+#mas 'Xcode', id: 497799835
