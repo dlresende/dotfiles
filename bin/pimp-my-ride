@@ -35,11 +35,11 @@ install_stuff() {
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 
-  brew bundle check || brew bundle install --upgrade "$noise_level"
+  brew bundle check 2> /dev/null || brew bundle install --upgrade "$noise_level"
 }
 
 install_ruby() {
-  rbenv install --skip-existing $(rbenv install -l | grep -v - | tail -1)
+  rbenv install --skip-existing "$(rbenv install -l | grep -v - | tail -1)"
 }
 
 check_rbenv() {
