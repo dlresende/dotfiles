@@ -35,7 +35,7 @@ install_stuff() {
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
 
-  brew bundle check 2> /dev/null || brew bundle install --upgrade "$noise_level"
+  brew bundle check --global 2> /dev/null || brew bundle install --global --upgrade "$noise_level"
 }
 
 install_ruby() {
