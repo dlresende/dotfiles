@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# Enable direnv
+# This must be configured before we load dotfiles below as this will append the
+# _direnv_hook to the PROMPT_COMMAND variable, but we want to control the order
+# of commands
+
+if command -v direnv > /dev/null
+then
+  eval "$(direnv hook bash)"
+fi
+
 # Load dotfiles
 for file in ~/.{aliases,path,exports,completions,dotfilesrc,functions}; do
 	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
@@ -9,14 +19,9 @@ for file in ~/.{aliases,path,exports,completions,dotfilesrc,functions}; do
 done
 unset file
 
-# Enable direnv
-if command -v direnv > /dev/null
-then
-  eval "$(direnv hook bash)"
-fi
-
-# Append to the history file instead of overwriting 
-shopt -s histappend
+# Disable automatic history appending - we'll write manually to have full
+# control and only save successful commands
+shopt -u histappend
 
 # Enable Homebrew
 if command -v brew > /dev/null

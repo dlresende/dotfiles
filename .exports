@@ -27,8 +27,17 @@ export RBENV_SHELL=bash
 # https://support.apple.com/en-gb/HT208050
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-# Larger bash history (allow 32³ entries; default is 500)
+# Larger BASH history (allow 32³ entries; default is 500)
 export HISTSIZE=50000000;
+
+# Ensure that only unique commands are saved to the BASH history
+export HISTCONTROL=ignoredups:erasedups
+
+# Only save successful commands to history file (keep failed commands in memory for current session)
+# Capture the command text before it executes (DEBUG trap runs before each command)
+trap '_last_cmd_text=$(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")' DEBUG
+# Write successful commands immediately to file, failed ones stay in memory only
+export PROMPT_COMMAND='_last_exit=$?; _direnv_hook; if [[ $_last_exit -eq 0 ]] && [[ -n "$_last_cmd_text" ]]; then echo "$_last_cmd_text" >> ~/.bash_history; fi; unset _last_exit _last_cmd_text'
 
 # Do not add commands starting with space, cd or ls to the history
 # export HISTIGNORE=' *:cd*:ls*'
