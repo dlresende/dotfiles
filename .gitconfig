@@ -1,12 +1,32 @@
+# Consult `git config --help` for details about the options
+
 [aliases]
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
 [color]
-  branch = auto
-  diff = auto
-  interactive = auto
-  status = auto
+  ui = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  frag = magenta bold # line info
+  meta = yellow bold
+  new = green # additions
+  old = red # deletions
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
 [core]
+  editor = vim
   excludesfile = ~/.gitignore_global
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
 [pull]
-  rebase = false
+  rebase = true
