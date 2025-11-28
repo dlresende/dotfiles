@@ -7,6 +7,6 @@
   interactive = auto
   status = auto
 [core]
-  excludesfile = /Users/dl018282/.gitignore_global
+  excludesfile = ~/.gitignore_global
 [pull]
   rebase = false

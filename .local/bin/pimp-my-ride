@@ -77,9 +77,6 @@ configure_go_workspace() {
 }
 
 configure_git() {
-  git config --global core.excludesfile ~/.gitignore_global
-  git config --global pull.rebase false
-
   ln -sf "${HOME}/.local/bin/git/hooks/pre-commit" "${HOME}/.git/hooks"
 }
 
