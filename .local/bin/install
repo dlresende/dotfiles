@@ -28,5 +28,5 @@ EOF
     git reset --hard origin/macOS
   fi
 
-  ./bin/pimp-my-ride
+  .local/bin/pimp-my-ride
 )
