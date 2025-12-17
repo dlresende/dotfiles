@@ -36,6 +36,9 @@ install_stuff() {
   fi
 
   brew bundle check --global 2> /dev/null || brew bundle install --global --upgrade "$noise_level"
+  # brew bundle --upgrade only upgrades formulas, not casks
+  # Run brew upgrade separately to upgrade casks as well
+  brew upgrade "$noise_level"
 }
 
 install_ruby() {
