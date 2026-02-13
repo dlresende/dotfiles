@@ -17,7 +17,7 @@ export LC_ALL="en_GB.UTF-8";
 # ruby-build installs a non-Homebrew OpenSSL for each Ruby version installed
 # and these are never upgraded.  Link Rubies to Homebrew's OpenSSL 1.1 (which
 # is upgraded).
-#RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+#RUBY_CONFIGURE_OPTS="--with-openssl-=$(brew --prefix openssl@1.1)"
 #export RUBY_CONFIGURE_OPTS
 
 # rbenv
@@ -35,9 +35,10 @@ export HISTCONTROL=ignoredups:erasedups
 
 # Only save successful commands to history file (keep failed commands in memory for current session)
 # Capture the command text before it executes (DEBUG trap runs before each command)
-trap '_last_cmd_text=$(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")' DEBUG
+# trap '_last_cmd_text=$(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")' DEBUG
 # Write successful commands immediately to file, failed ones stay in memory only
-export PROMPT_COMMAND='_last_exit=$?; _direnv_hook; if [[ $_last_exit -eq 0 ]] && [[ -n "$_last_cmd_text" ]]; then echo "$_last_cmd_text" >> ~/.bash_history; fi; unset _last_exit _last_cmd_text'
+# export PROMPT_COMMAND='_last_exit=$?; _env_hook; if [[ $_last_exit -eq 0 ]] && [[ -n "$_last_cmd_text" ]]; then echo "$_last_cmd_text" >> ~/.bash_history; fi; unset _last_exit _last_cmd_text'
+export PROMPT_COMMAND=''
 
 # Do not add commands starting with space, cd or ls to the history
 # export HISTIGNORE=' *:cd*:ls*'
@@ -51,3 +52,34 @@ export TERM=xterm-256color
 export PS1="\n\$([ \$? -gt 0 ] && printf '\[\033[31m\]'; printf '; \[\033[0m\]')"
 
 export HOMEBREW_BUNDLE_FILE_GLOBAL="${HOME}/.Brewfile"
+
+case "$( uname -s )" in
+  Linux)
+    export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+    export HOMEBREW_CELLAR="${HOMEBREW_PREFIX}/Cellar";
+    export HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}/Homebrew";
+    export PATH="${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin${PATH+:$PATH}";
+    [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
+    export INFOPATH="${HOMEBREW_PREFIX}/share/info:${INFOPATH:-}";
+    ;;
+esac
+
+# Configure Go. See go env for a full list of environment variables.
+# Commenting GOROOT and GOBIN for the time being as it prevents switching
+# between golang versions: `brew unlink go@1.18 && brew link go --overwrite`
+
+# This is the location of the Go installation. It is used to find the standard
+# libraries.
+#GOROOT="$(brew --prefix golang)/libexec"
+#export GOROOT
+
+# The directory where go install and go get will place binaries after building
+# main packages. Generally this is set to somewhere on the system PATH so that
+# installed binaries can be run and discovered easily.
+#GOBIN="${GOROOT}/bin"
+#export GOBIN
+# GOPATH is a variable that defines the root of the workspace. The go get tool
+# downloads packages to the first directory in GOPATH.
+GOPATH="${HOME}/go"
+export GOPATH
+

@@ -29,6 +29,27 @@ install_stuff() {
   else
     noise_level='--debug'
   fi
+  
+  case "$( uname -s )" in
+    Linux)
+      # Install Homebrew dependencies
+      # https://docs.brew.sh/Homebrew-on-Linux#requirements
+      sudo apt-get install --yes \
+        build-essential \
+        procps \
+        curl \
+        file \
+        git
+
+      # Install Flatpak so we can manage more app installations from Homebrew
+      # https://flatpak.org/setup/Ubuntu
+      sudo apt-get install --yes \
+        flatpak \
+        gnome-software-plugin-flatpak
+
+      flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+      ;;
+  esac
 
   if ! command -v 'brew' &> /dev/null
   then
