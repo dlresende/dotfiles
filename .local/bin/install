@@ -25,7 +25,7 @@ EOF
     git init
     git remote add origin https://github.com/dlresende/dotfiles.git
     git fetch --all
-    git reset --hard origin/macOS
+    git reset --hard origin/linux
   fi
 
   .local/bin/pimp-my-ride
