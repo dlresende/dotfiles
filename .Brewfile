@@ -117,6 +117,6 @@ cask 'vlc'
 
 #mas 'Xcode', id: 497799835
 
-# flatpak 'com.spotify.Client' if OS.linux?
 # flatpak 'com.protonvpn.www'
+flatpak 'com.spotify.Client'
 flatpak 'org.mozilla.Thunderbird'
