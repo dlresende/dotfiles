@@ -112,11 +112,11 @@ brew 'yarn' # required by coc.vim
 #cask 'iterm2' if OS.mac?
 #cask 'libreoffice'
 #cask 'nextcloud'
-cask 'thunderbird'
+# cask 'thunderbird'
 cask 'vlc'
 
 #mas 'Xcode', id: 497799835
 
 # flatpak 'com.spotify.Client' if OS.linux?
-# flatpak 'org.mozilla.Thunderbird'
 # flatpak 'com.protonvpn.www'
+flatpak 'org.mozilla.Thunderbird'
