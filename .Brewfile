@@ -76,7 +76,7 @@ brew 'node'
 #brew 'pmd'
 #brew 'python'
 #brew 'python-yq'
-#brew 'rbenv'
+brew 'rbenv'
 #brew 'readline'
 #brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
 #brew 'ripgrep'    # required by coc.nvim
