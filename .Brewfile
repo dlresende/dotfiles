@@ -118,5 +118,6 @@ cask 'vlc'
 #mas 'Xcode', id: 497799835
 
 flatpak 'com.protonvpn.www'
+flatpak 'com.slack.Slack'
 flatpak 'com.spotify.Client'
 flatpak 'org.mozilla.Thunderbird'
