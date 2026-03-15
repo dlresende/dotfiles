@@ -97,7 +97,7 @@ brew 'vim'
 #brew 'watch'
 #brew 'webp'
 #brew 'wget'
-brew 'xsel' if OS.linux? # required by tmux plugin tmux-yank
+brew 'xsel' if OS.linux? # required by tmux plugin tmux-yank, and VIm
 brew 'yarn' # required by coc.vim
 #brew 'ytt'
 
