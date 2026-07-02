@@ -4,7 +4,6 @@ tap 'git-duet/tap'
 tap 'hashicorp/tap'
 tap 'heroku/brew'
 tap 'neovim/neovim'
-tap 'zegervdv/zathura'
 
 brew 'ack'
 brew 'autoconf'
