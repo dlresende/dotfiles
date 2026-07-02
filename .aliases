@@ -2,3 +2,6 @@
 # vim: foldmethod=indent
 
 alias delete_branches='cleanup_branches'
+
+alias python='python3'
+alias pip='pip3'
