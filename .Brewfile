@@ -42,7 +42,7 @@ brew 'helm'
 brew 'heroku'
 brew 'htop'
 brew 'ipcalc'
-brew 'java' unless system "/usr/libexec/java_home --failfast"
+brew 'java' unless system "/usr/libexec/java_home --failfast >/dev/null 2>&1"
 brew 'jemalloc'
 brew 'jmeter'
 brew 'jpeg'
