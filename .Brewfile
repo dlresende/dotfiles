@@ -105,6 +105,8 @@ brew 'wget'
 brew 'yarn' # required by coc.vim
 brew 'ytt'
 
+cask '1password'
+cask '1password-cli'
 cask 'adobe-acrobat-reader'
 cask 'android-platform-tools'
 cask 'android-studio'
