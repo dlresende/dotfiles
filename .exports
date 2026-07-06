@@ -51,3 +51,4 @@ export TERM=xterm-256color
 export PS1="\n\$([ \$? -gt 0 ] && printf '\[\033[31m\]'; printf '; \[\033[0m\]')"
 
 export HOMEBREW_BUNDLE_FILE_GLOBAL="${HOME}/.Brewfile"
+export HOMEBREW_NO_ASK=1
