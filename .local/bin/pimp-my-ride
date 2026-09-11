@@ -39,6 +39,22 @@ install_stuff() {
   # brew bundle --upgrade only upgrades formulas, not casks
   # Run brew upgrade separately to upgrade casks as well
   brew upgrade "$noise_level"
+
+  log_tool_versions
+}
+
+log_tool_versions() {
+  local log_file_suffix
+  log_file_suffix=$(date +%Y%m%d-%H%M%S)
+
+  local log_dir
+  log_dir="${HOME}/.local/log"
+  mkdir -p "$log_dir" 
+
+  local log_file
+  log_file="${log_dir}/pimp.$log_file_suffix"
+
+  brew bundle list --formula --casks --global | xargs brew list --versions > "${log_file}"
 }
 
 install_ruby() {
