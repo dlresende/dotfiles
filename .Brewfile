@@ -4,6 +4,7 @@ tap 'git-duet/tap'
 tap 'hashicorp/tap'
 tap 'heroku/brew'
 tap 'neovim/neovim'
+tap 'ovh/tap'
 
 brew 'ack'
 brew 'autoconf'
@@ -119,7 +120,8 @@ cask 'gcloud-cli'
 cask 'iterm2'
 cask 'libreoffice'
 cask 'nextcloud'
+cask 'ovhcloud-cli'
 cask 'thunderbird'
 cask 'vlc'
 
-#mas 'Xcode', id: 497799835
+mas 'Xcode', id: 497799835
