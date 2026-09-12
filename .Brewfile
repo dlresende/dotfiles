@@ -76,6 +76,8 @@ brew 'nmap'
 brew 'node'
 brew 'oniguruma'
 brew 'openldap'
+brew 'openjdk'
+brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk"
 brew 'openssl'
 brew 'perl' # required by mr
 brew 'pmd'
