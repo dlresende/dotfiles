@@ -30,3 +30,17 @@
 
 [pull]
   rebase = true
+
+[credential "https://github.com"]
+  helper = # resets any helper set by lower-priority config
+  helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+  helper = # resets any helper set by lower-priority config
+  helper = !gh auth git-credential
+
+# Anything machine-specific or not for public consumption (work hosts, commit
+# template, identity) lives here. Git ignores the include if the file is
+# missing, so a fresh checkout still works.
+[include]
+  path = ~/.gitconfig.local
