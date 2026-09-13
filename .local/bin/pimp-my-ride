@@ -14,6 +14,7 @@ main() {
   configure_vim
   configure_tmux
   configure_git
+  configure_ubuntu
 }
 
 switch_to_bash() {
@@ -102,6 +103,11 @@ configure_go_workspace() {
 
 configure_git() {
   ln -sf "${HOME}/.local/bin/git/hooks/pre-commit" "${HOME}/.git/hooks"
+}
+
+configure_ubuntu() {
+  sudo mkdir -p /etc/systemd/logind.conf.d/
+  sudo cp ~/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf /etc/systemd/logind.conf.d/
 }
 
 main
