@@ -5,7 +5,6 @@
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
-    set -x
 
 ( cd "$HOME" || exit 1
   
