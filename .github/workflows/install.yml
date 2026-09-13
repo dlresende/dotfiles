@@ -2,11 +2,28 @@
 name: install
 on:
   push:
-    branches: [ macOS ]
+    branches: [ linux ]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+# A newer push supersedes an in-flight run rather than queueing another
+# full install alongside it.
+concurrency:
+  group: install-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    # Without this a hang costs the 6h job ceiling instead of failing fast.
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          # The install script executes third-party code (the Homebrew
+          # installer, rbenv-doctor, tpm plugins), and HOME is set to the
+          # workspace below, so don't leave a token behind in .git/config
+          persist-credentials: false
       - run: echo "HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       - run: source .bashrc && DEBUG=1 .local/bin/install
