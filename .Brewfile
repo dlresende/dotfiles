@@ -82,7 +82,7 @@ brew 'openssl'
 brew 'perl' # required by mr
 brew 'pmd'
 brew 'python'
-brew 'python-yq'
+brew 'python-yq', args: ['force', 'overwrite']
 brew 'rbenv'
 brew 'readline'
 brew 'reattach-to-user-namespace'
