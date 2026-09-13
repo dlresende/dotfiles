@@ -1,9 +1,10 @@
+tap 'anomalyco/tap'
 #tap 'carvel-dev/carvel'
 #tap 'git-duet/tap'
 #tap 'hashicorp/tap'
 #tap 'heroku/brew'
 #tap 'neovim/neovim'
-#
+
 #brew 'ack'
 #brew 'autoconf'
 #brew 'automake'
@@ -20,6 +21,7 @@ brew 'block-goose-cli'
 #brew 'csvkit'
 #brew 'direnv'
 #brew 'erlang'
+# brew 'ffmpeg' installed via apt
 #brew 'fontconfig'
 #brew 'freetype'
 #brew 'fzf'
@@ -50,6 +52,7 @@ brew 'jq'
 #brew 'kapp'
 #brew 'kbld'
 #brew 'kind'
+brew 'kubectl'
 #brew 'leiningen'
 #brew 'libevent'
 #brew 'libpng'
@@ -70,14 +73,18 @@ brew 'neovim'
 #brew 'ngrep'
 #brew 'nmap'
 brew 'node'
+brew 'oci-cli'
 #brew 'oniguruma'
+brew 'opencode'
 #brew 'openldap'
-#brew 'openssl'
+brew 'openssl' # required by ruby/rbenv
+brew 'openssh' # required by ruby/rbenv
+brew 'opentofu'
 #brew 'pmd'
 #brew 'python'
 #brew 'python-yq'
 brew 'rbenv'
-#brew 'readline'
+brew 'readline' # required by ruby/rbenv
 #brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
 #brew 'ripgrep'    # required by coc.nvim
 #brew 'ruby-install'
@@ -100,6 +107,7 @@ brew 'vim'
 brew 'xsel' if OS.linux? # required by tmux plugin tmux-yank, and VIm
 brew 'yarn' # required by coc.vim
 #brew 'ytt'
+brew 'zlib' # required by ruby/rbenv
 
 #cask 'adobe-acrobat-reader'
 #cask 'android-platform-tools'
@@ -117,7 +125,15 @@ cask 'vlc'
 
 #mas 'Xcode', id: 497799835
 
+# flatpak 'org.mozilla.firefox'
+flatpak 'com.mattjakeman.ExtensionManager'
 flatpak 'com.protonvpn.www'
 flatpak 'com.slack.Slack'
 flatpak 'com.spotify.Client'
-flatpak 'org.mozilla.Thunderbird'
+flatpak 'org.audacityteam.Audacity'
+flatpak 'org.chromium.Chromium'
+flatpak 'org.libreoffice.LibreOffice'
+flatpak 'org.mozilla.thunderbird_esr'
+flatpak 'org.videolan.VLC'
+
+system "/home/linuxbrew/.linuxbrew/sbin/sshd -p 2222"
