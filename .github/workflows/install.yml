@@ -20,8 +20,9 @@ jobs:
     timeout-minutes: 45
     env:
       # `mas` needs an App Store sign-in the runner does not have, so Xcode
-      # would block until the job is killed.
-      HOMEBREW_BUNDLE_MAS_SKIP: 1
+      # would block until the job is killed. This is a space-separated list
+      # of app names/ids to skip, not a boolean - `1` was a silent no-op.
+      HOMEBREW_BUNDLE_MAS_SKIP: 497799835
     steps:
       - uses: actions/checkout@v4
         with:
