@@ -10,7 +10,10 @@ set -o pipefail # fail if any component of any pipe fails
 main() {
   switch_to_bash
   install_stuff
-  install_ruby && check_rbenv
+  # TODO: re-enable once the rest of the Linux setup is stable. Building
+  # Ruby from source is by far the slowest step and isn't needed to iterate
+  # on the other pieces.
+  # install_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
