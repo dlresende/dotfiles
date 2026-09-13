@@ -135,5 +135,3 @@ flatpak 'org.chromium.Chromium'
 flatpak 'org.libreoffice.LibreOffice'
 flatpak 'org.mozilla.thunderbird_esr'
 flatpak 'org.videolan.VLC'
-
-system "/home/linuxbrew/.linuxbrew/sbin/sshd -p 2222"
