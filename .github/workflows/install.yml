@@ -3,11 +3,25 @@ name: install
 on:
   push:
     branches: [ macOS ]
+  workflow_dispatch:
 permissions:
   contents: read
+
+# A newer push supersedes an in-flight run rather than queueing another
+# full install alongside it.
+concurrency:
+  group: install-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: macos-latest
+    # Without this a hang costs the 6h job ceiling instead of failing fast.
+    timeout-minutes: 45
+    env:
+      # `mas` needs an App Store sign-in the runner does not have, so Xcode
+      # would block until the job is killed.
+      HOMEBREW_BUNDLE_MAS_SKIP: 1
     steps:
       - uses: actions/checkout@v4
         with:
