@@ -56,7 +56,12 @@ log_tool_versions() {
   local log_file
   log_file="${log_dir}/pimp.$log_file_suffix"
 
-  brew bundle list --formula --casks --global | xargs brew list --versions > "${log_file}"
+  # brew list --versions ignores casks unless told to, so a combined
+  # --formula --casks list makes it fail on every cask name.
+  {
+    brew bundle list --formula --global | xargs brew list --versions --formula
+    brew bundle list --casks --global | xargs brew list --versions --cask
+  } > "${log_file}"
 }
 
 install_ruby() {
