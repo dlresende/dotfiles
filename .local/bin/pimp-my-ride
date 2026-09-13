@@ -109,8 +109,16 @@ configure_git() {
 }
 
 configure_ubuntu() {
+  local conf="${HOME}/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf"
+
+  if [ ! -f "$conf" ]
+  then
+    echo "configure_ubuntu: missing $conf" >&2
+    return 1
+  fi
+
   sudo mkdir -p /etc/systemd/logind.conf.d/
-  sudo cp ~/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf /etc/systemd/logind.conf.d/
+  sudo cp "$conf" /etc/systemd/logind.conf.d/
 }
 
 main
