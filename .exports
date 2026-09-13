@@ -19,6 +19,8 @@ export LC_ALL="en_GB.UTF-8";
 # is upgraded).
 #RUBY_CONFIGURE_OPTS="--with-openssl-=$(brew --prefix openssl@1.1)"
 #export RUBY_CONFIGURE_OPTS
+# Make sure Ruby links to the system zlib (installed via Homebrew) during rbenv compilation
+export RUBY_CONFIGURE_OPTS="--with-zlib-dir=$(brew --prefix zlib)"
 
 # rbenv
 export RBENV_SHELL=bash
