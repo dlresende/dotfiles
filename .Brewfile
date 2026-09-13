@@ -1,10 +1,10 @@
-tap 'carvel-dev/carvel'
-tap 'cloudfoundry/tap'
-tap 'git-duet/tap'
-tap 'hashicorp/tap'
-tap 'heroku/brew'
-tap 'neovim/neovim'
-tap 'ovh/tap'
+tap 'carvel-dev/carvel', trusted: true
+tap 'cloudfoundry/tap', trusted: true
+tap 'git-duet/tap', trusted: true
+tap 'hashicorp/tap', trusted: true
+tap 'heroku/brew', trusted: true
+tap 'neovim/neovim', trusted: true
+tap 'ovh/tap', trusted: true
 
 brew 'ack'
 brew 'autoconf'
