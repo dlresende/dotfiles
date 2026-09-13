@@ -10,6 +10,14 @@ then
   eval "$(direnv hook bash)"
 fi
 
+# Enable Homebrew. Must run before loading dotfiles below: `brew shellenv`
+# prepends /opt/homebrew/{bin,sbin} to PATH, which would otherwise undo the
+# ordering .path establishes (rbenv shims and ~/.local/bin ahead of it).
+if command -v brew > /dev/null
+then
+  eval "$(brew shellenv)"
+fi
+
 # Load dotfiles
 for file in ~/.{aliases,path,exports,completions,dotfilesrc,functions}; do
 	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
@@ -22,9 +30,3 @@ unset file
 # Disable automatic history appending - we'll write manually to have full
 # control and only save successful commands
 shopt -u histappend
-
-# Enable Homebrew
-if command -v brew > /dev/null
-then
-  eval "$(brew shellenv)"
-fi
