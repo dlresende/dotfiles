@@ -2,17 +2,30 @@
 # vim: foldmethod=indent
 
 cleanup_branches() {
-  local current
+  local current branch confirmation
+
   current="$( git branch --show-current )"
+
+  # Detached HEAD would leave $current empty and match nothing to keep,
+  # i.e. every branch would be deleted.
+  if [ -z "$current" ]
+  then
+    echo "Not on a branch (detached HEAD?). Aborting..." >&2
+    return 1
+  fi
 
   read -p "Do you want to delete all branches except \"${current}\" [y/N]: " -r confirmation
 
   case "$confirmation" in
     'y'|'Y')
-      for branch in $( git branch | grep '^ ' )
+      # for-each-ref rather than parsing `git branch` output, and a read loop
+      # rather than word splitting, so branch names survive intact.
+      # -d (not -D) refuses to drop unmerged work.
+      while IFS= read -r branch
       do
-        git branch -D "$branch"
-      done
+        [ -n "$branch" ] || continue
+        git branch -d "$branch"
+      done < <( git for-each-ref --format='%(refname:short)' refs/heads/ | grep -vFx "$current" )
       ;;
     *)
       echo "Aborting..."
