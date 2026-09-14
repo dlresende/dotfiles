@@ -42,7 +42,6 @@ brew 'gopls'  # used by coc.nvim
 brew 'gradle'
 brew 'graphviz'
 brew 'gron'
-brew 'hashicorp/tap/terraform'  # required by bbl
 brew 'helm'
 brew 'heroku'
 brew 'htop'
