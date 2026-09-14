@@ -67,11 +67,12 @@ install_stuff() {
         flatpak \
         gnome-software-plugin-flatpak
 
-      # Allow members of sudo to install Flatpaks without interactive polkit prompt
+      # Allow users to install Flatpaks without interactive polkit prompt
       if [ -d /etc/polkit-1/rules.d ]; then
         sudo tee /etc/polkit-1/rules.d/49-flatpak.rules > /dev/null << 'EOF'
 polkit.addRule(function(action, subject) {
-    if (action.id.indexOf("org.freedesktop.Flatpak.") === 0 && subject.isInGroup("sudo")) {
+    if (action.id.indexOf("org.freedesktop.Flatpak") === 0 ||
+        action.id.indexOf("org.freedesktop.flatpak") === 0) {
         return polkit.Result.YES;
     }
 });
@@ -79,9 +80,9 @@ EOF
       fi
       if [ -d /etc/polkit-1/localauthority/50-local.d ]; then
         sudo tee /etc/polkit-1/localauthority/50-local.d/45-flatpak.pkla > /dev/null << 'EOF'
-[Allow sudo to install flatpaks]
-Identity=unix-group:sudo
-Action=org.freedesktop.Flatpak.*
+[Allow all users to manage flatpak]
+Identity=unix-user:*
+Action=org.freedesktop.Flatpak.*;org.freedesktop.flatpak.*
 ResultAny=yes
 ResultInactive=yes
 ResultActive=yes
