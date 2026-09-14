@@ -3,15 +3,14 @@
 : "${DEBUG:=}"
 : "${HOMEBREW_BUNDLE_FILE_GLOBAL:=$HOME/.Brewfile}"
 
+OS="$(uname -s)"
+
 # So `command -v brew` finds an existing install regardless of whether this
-# script was launched from a shell that sourced .exports. Homebrew's
-# install locations are fixed per OS, so try both rather than branching on
-# uname.
-for homebrew_bin in /opt/homebrew/bin /home/linuxbrew/.linuxbrew/bin
-do
-  [ -d "$homebrew_bin" ] && export PATH="$homebrew_bin:$PATH"
-done
-unset homebrew_bin
+# script was launched from a shell that sourced .exports.
+case "$OS" in
+  Darwin) export PATH="/opt/homebrew/bin:$PATH" ;;
+  Linux)  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" ;;
+esac
 
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
@@ -30,7 +29,7 @@ main() {
 }
 
 accept_xcode_license() {
-  [ "$(uname -s)" = 'Darwin' ] || return 0
+  [ "$OS" = 'Darwin' ] || return 0
 
   # Same detection Homebrew's own installer uses: xcrun fails and mentions
   # "license" when the Xcode/CLT license hasn't been accepted yet. Building
