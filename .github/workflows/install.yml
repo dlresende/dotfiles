@@ -3,6 +3,8 @@ name: install
 on:
   push:
     branches: [ linux ]
+  pull_request:
+    branches: [ linux ]
   workflow_dispatch:
 permissions:
   contents: read
