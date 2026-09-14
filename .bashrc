@@ -5,13 +5,21 @@
 # _direnv_hook to the PROMPT_COMMAND variable, but we want to control the order
 # of commands
 
-# if command -v direnv > /dev/null
-# then
-#   eval "$(direnv hook bash)"
-# fi
+if command -v direnv > /dev/null
+then
+  eval "$(direnv hook bash)"
+fi
+
+# Enable Homebrew. Must run before loading dotfiles below: `brew shellenv`
+# prepends /opt/homebrew/{bin,sbin} to PATH, which would otherwise undo the
+# ordering .path establishes (rbenv shims and ~/.local/bin ahead of it).
+if command -v brew > /dev/null
+then
+  eval "$(brew shellenv)"
+fi
 
 # Load dotfiles
-for file in ~/.{aliases,exports,path,completions,dotfilesrc,functions}; do
+for file in ~/.{aliases,path,exports,completions,dotfilesrc,functions}; do
 	if [[ -r "$file" ]] && [[ -f "$file" ]]; then
 		# shellcheck source=/dev/null
 		source "$file"
@@ -22,18 +30,3 @@ unset file
 # Disable automatic history appending - we'll write manually to have full
 # control and only save successful commands
 shopt -u histappend
-
-# Enable Homebrew
-# if command -v brew > /dev/null
-# then
-#   /home/linuxbrew/.linuxbrew/bin/brew shellenv bash
-# fi
-
-# case "$( uname -s )" in
-#   Darwin)
-#     eval "$(brew shellenv)"
-#     ;;
-#   Linux)
-#     eval "$( /home/linuxbrew/.linuxbrew/bin/brew shellenv bash )"
-#     ;;
-# esac
