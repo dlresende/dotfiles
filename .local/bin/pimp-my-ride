@@ -3,6 +3,16 @@
 : "${DEBUG:=}"
 : "${HOMEBREW_BUNDLE_FILE_GLOBAL:=$HOME/.Brewfile}"
 
+# So `command -v brew` finds an existing install regardless of whether this
+# script was launched from a shell that sourced .exports. Homebrew's
+# install locations are fixed per OS, so try both rather than branching on
+# uname.
+for homebrew_bin in /opt/homebrew/bin /home/linuxbrew/.linuxbrew/bin
+do
+  [ -d "$homebrew_bin" ] && export PATH="$homebrew_bin:$PATH"
+done
+unset homebrew_bin
+
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
@@ -32,34 +42,37 @@ install_stuff() {
     noise_level='--debug'
   fi
 
-  if [ -x /opt/homebrew/bin/brew ]
-  then
-    # Already installed on disk - `command -v brew` below would still say
-    # "not found" here if this script wasn't launched from a shell that
-    # sourced .exports, and re-running the installer against an existing
-    # Homebrew is exactly what triggers the sudo failure noted below.
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  elif ! command -v 'brew' &> /dev/null
-  then
-    # The installer's NONINTERACTIVE sudo check uses `sudo -n`, which never
-    # prompts - without an already-cached ticket it fails immediately even
-    # for a genuine admin. Establish the ticket ourselves first.
-    sudo -v
-
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    # The installer only prints instructions to add itself to PATH - it
-    # never touches the running shell - so `brew` is still not found in
-    # this same script run without doing it ourselves.
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
+  ensure_homebrew_installed
 
   brew bundle check --global 2> /dev/null || brew bundle install --global --upgrade "$noise_level"
-  # brew bundle --upgrade only upgrades formulas, not casks
-  # Run brew upgrade separately to upgrade casks as well
+  # brew bundle --upgrade skips casks; brew upgrade covers them too
   brew upgrade "$noise_level"
 
   log_tool_versions
+}
+
+ensure_homebrew_installed() {
+  if command -v brew &> /dev/null
+  then
+    load_homebrew_env
+    return
+  fi
+
+  refresh_admin_credentials
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  load_homebrew_env
+}
+
+refresh_admin_credentials() {
+  # Homebrew's NONINTERACTIVE installer checks sudo access with `sudo -n`,
+  # which never prompts - prime a ticket so that check finds one cached.
+  sudo -v
+}
+
+load_homebrew_env() {
+  # The installer only prints PATH instructions, it never touches the
+  # running shell.
+  eval "$(brew shellenv)"
 }
 
 log_tool_versions() {
@@ -73,8 +86,7 @@ log_tool_versions() {
   local log_file
   log_file="${log_dir}/pimp.$log_file_suffix"
 
-  # brew list --versions ignores casks unless told to, so a combined
-  # --formula --casks list makes it fail on every cask name.
+  # brew list --versions ignores casks unless told which type to list
   {
     brew bundle list --formula --global | xargs brew list --versions --formula
     brew bundle list --casks --global | xargs brew list --versions --cask
