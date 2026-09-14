@@ -1,0 +1,24 @@
+# Jekyll excludes dotfiles by default, which would hide almost everything in
+# this repo (.local/bin/install, .bashrc, ...). Re-include them so Pages
+# serves the raw files instead of a 404.
+#
+# Deliberately NOT a bare ".*" glob: GitHub Pages builds with Jekyll 3.10.0,
+# where a ".*" include pattern also matches the "." and ".." directory
+# entries, sending EntryFilter#glob_include? into infinite recursion
+# (SystemStackError - reproduced locally against the same jekyll version).
+include:
+  - .Brewfile
+  - .aliases
+  - .bash_profile
+  - .bashrc
+  - .completions
+  - .exports
+  - .functions
+  - .gemrc
+  - .gitconfig
+  - .gitignore
+  - .github
+  - .local
+  - .path
+  - .tigrc
+  - .tmux.conf
