@@ -32,8 +32,20 @@ install_stuff() {
     noise_level='--debug'
   fi
 
-  if ! command -v 'brew' &> /dev/null
+  if [ -x /opt/homebrew/bin/brew ]
   then
+    # Already installed on disk - `command -v brew` below would still say
+    # "not found" here if this script wasn't launched from a shell that
+    # sourced .exports, and re-running the installer against an existing
+    # Homebrew is exactly what triggers the sudo failure noted below.
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif ! command -v 'brew' &> /dev/null
+  then
+    # The installer's NONINTERACTIVE sudo check uses `sudo -n`, which never
+    # prompts - without an already-cached ticket it fails immediately even
+    # for a genuine admin. Establish the ticket ourselves first.
+    sudo -v
+
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # The installer only prints instructions to add itself to PATH - it
