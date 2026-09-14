@@ -1,3 +1,4 @@
+tap 'anomalyco/tap', trusted: true
 tap 'carvel-dev/carvel', trusted: true
 tap 'cloudfoundry/tap', trusted: true
 tap 'heroku/brew', trusted: true
@@ -10,9 +11,10 @@ brew 'automake'
 brew 'awscli'
 brew 'azure-cli'
 brew 'bash'
-brew 'bash-language-server'
-brew 'bosh-cli'
+brew 'bash-language-server' # used by coc.nvim
 brew 'bitwarden-cli'
+brew 'block-goose-cli'
+brew 'bosh-cli'
 brew 'cabal-install'
 brew 'chruby'
 brew 'cmake'
@@ -48,6 +50,7 @@ brew 'jq'
 brew 'kapp'
 brew 'kbld'
 brew 'kind'
+brew 'kubectl'
 brew 'leiningen'
 brew 'libevent'
 brew 'libpng'
@@ -61,7 +64,7 @@ brew 'libxml2'
 brew 'libxslt'
 brew 'libyaml'
 brew 'lua'
-brew 'mas'
+brew 'mas' if OS.mac?
 brew 'maven'
 brew 'mr'
 brew 'msgpack'
@@ -69,25 +72,29 @@ brew 'neovim'
 brew 'ngrep'
 brew 'nmap'
 brew 'node'
+brew 'oci-cli'
 brew 'oniguruma'
+brew 'opencode'
 brew 'openldap'
 brew 'openjdk'
-brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk"
+brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk" if OS.mac?
+brew 'openssh'
 brew 'openssl'
+brew 'opentofu'
 brew 'perl' # required by mr
 brew 'pmd'
 brew 'python'
 brew 'python-yq', args: ['force', 'overwrite']
 brew 'rbenv'
-brew 'readline'
-brew 'reattach-to-user-namespace'
+brew 'readline' # required by ruby/rbenv
+brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
 brew 'ripgrep'    # required by coc.nvim
 brew 'ruby-install'
 brew 's3cmd'
 brew 'sbt'
 brew 'scala'
 brew 'shellcheck' # used by vim in conjunction with bash-language-server
-brew 'telnet'
+brew 'telnet' if OS.mac?
 brew 'the_silver_searcher'
 brew 'tig'
 brew 'tmate'
@@ -99,26 +106,38 @@ brew 'vim'
 brew 'watch'
 brew 'webp'
 brew 'wget'
+brew 'xsel' if OS.linux? # required by tmux plugin tmux-yank, and VIm
 brew 'yarn' # required by coc.vim
 brew 'ytt'
+brew 'zlib' # required by ruby/rbenv
 
-cask '1password'
-cask '1password-cli'
-cask 'adobe-acrobat-reader'
-cask 'android-platform-tools'
-cask 'android-studio'
-cask 'block-goose'
-cask 'caffeine'
-cask 'claude-code'
-cask 'docker-desktop'
+cask '1password' if OS.mac?
+cask '1password-cli' if OS.mac?
+cask 'adobe-acrobat-reader' if OS.mac?
+cask 'android-platform-tools' if OS.mac?
+cask 'android-studio' if OS.mac?
+cask 'block-goose' if OS.mac?
+cask 'caffeine' if OS.mac?
+cask 'claude-code' if OS.mac?
+cask 'docker-desktop' if OS.mac?
 #cask 'fly'
-cask 'flycut'
-cask 'gcloud-cli'
-cask 'iterm2'
-cask 'libreoffice'
-cask 'nextcloud'
-cask 'ovhcloud-cli'
-cask 'thunderbird'
-cask 'vlc'
+cask 'flycut' if OS.mac?
+cask 'gcloud-cli' if OS.mac?
+cask 'iterm2' if OS.mac?
+cask 'libreoffice' if OS.mac?
+cask 'nextcloud' if OS.mac?
+cask 'ovhcloud-cli' if OS.mac?
+cask 'thunderbird' if OS.mac?
+cask 'vlc' if OS.mac?
 
-mas 'Xcode', id: 497799835
+mas 'Xcode', id: 497799835 if OS.mac?
+
+flatpak 'com.mattjakeman.ExtensionManager' if OS.linux?
+flatpak 'com.protonvpn.www' if OS.linux?
+flatpak 'com.slack.Slack' if OS.linux?
+flatpak 'com.spotify.Client' if OS.linux?
+flatpak 'org.audacityteam.Audacity' if OS.linux?
+flatpak 'org.chromium.Chromium' if OS.linux?
+flatpak 'org.libreoffice.LibreOffice' if OS.linux?
+flatpak 'org.mozilla.thunderbird_esr' if OS.linux?
+flatpak 'org.videolan.VLC' if OS.linux?
