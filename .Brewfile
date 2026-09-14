@@ -99,7 +99,7 @@ brew 's3cmd'
 brew 'sbt'
 brew 'scala'
 brew 'shellcheck' # used by vim in conjunction with bash-language-server
-brew 'telnet'
+brew 'telnet' if OS.mac?
 brew 'the_silver_searcher'
 brew 'tig'
 brew 'tmate'
