@@ -13,11 +13,10 @@ esac
 export HOMEBREW_PREFIX
 
 # So `command -v brew` finds an existing install regardless of whether this
-# script was launched from a shell that sourced .exports. Only prepend when
-# brew genuinely isn't findable yet - .bashrc already puts rbenv shims
-# ahead of Homebrew's own bin, and prepending again here would undo that
-# ordering.
-command -v brew &> /dev/null || [ -z "$HOMEBREW_PREFIX" ] || export PATH="$HOMEBREW_PREFIX/bin:$PATH"
+# script was launched from a shell that sourced .exports. Appending, not
+# prepending, means this can never outrank .bashrc's own ordering (rbenv
+# shims ahead of Homebrew's bin) - safe to always run, no guard needed.
+export PATH="$PATH:$HOMEBREW_PREFIX/bin"
 
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
