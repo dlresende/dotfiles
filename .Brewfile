@@ -1,8 +1,6 @@
 tap 'anomalyco/tap', trusted: true
 tap 'carvel-dev/carvel', trusted: true
 tap 'cloudfoundry/tap', trusted: true
-tap 'git-duet/tap', trusted: true
-tap 'hashicorp/tap', trusted: true
 tap 'heroku/brew', trusted: true
 tap 'neovim/neovim', trusted: true
 tap 'ovh/tap', trusted: true
@@ -14,7 +12,6 @@ brew 'awscli'
 brew 'azure-cli'
 brew 'bash'
 brew 'bash-language-server' # used by coc.nvim
-brew 'bbl'
 brew 'bitwarden-cli'
 brew 'block-goose-cli'
 brew 'bosh-cli'
@@ -36,7 +33,6 @@ brew 'gh'
 brew 'ghc'
 brew 'git'
 brew 'git-crypt'
-brew 'git-duet'
 brew 'go'
 brew 'gopls'  # used by coc.nvim
 brew 'gradle'
@@ -124,6 +120,7 @@ cask 'block-goose' if OS.mac?
 cask 'caffeine' if OS.mac?
 cask 'claude-code' if OS.mac?
 cask 'docker-desktop' if OS.mac?
+#cask 'fly'
 cask 'flycut' if OS.mac?
 cask 'gcloud-cli' if OS.mac?
 cask 'iterm2' if OS.mac?
