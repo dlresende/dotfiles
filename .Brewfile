@@ -1,6 +1,5 @@
 tap 'carvel-dev/carvel', trusted: true
 tap 'cloudfoundry/tap', trusted: true
-tap 'git-duet/tap', trusted: true
 tap 'heroku/brew', trusted: true
 tap 'neovim/neovim', trusted: true
 tap 'ovh/tap', trusted: true
@@ -32,7 +31,6 @@ brew 'gh'
 brew 'ghc'
 brew 'git'
 brew 'git-crypt'
-brew 'git-duet'
 brew 'go'
 brew 'gopls'  # used by coc.nvim
 brew 'gradle'
