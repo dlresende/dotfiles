@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+# Minimal git-duet replacement: resolves initials via a git-duet-compatible
+# .git-authors file (see https://github.com/git-duet/git-duet#readme) and
+# persists the pair via git config, scoped to the current repository, so it
+# survives across separate processes (e.g. tig's `C` binding, which cannot
+# see a shell's exported env vars). Sets author only, plus a Co-authored-by
+# trailer for git-duet-commit to use - unlike real git-duet, this never
+# touches the committer.
+#
+# Deliberately does not support email_template or an external
+# email-lookup command - add an `email_addresses:` entry instead if a
+# derived address is wrong.
+
+set -euo pipefail
+
+lookup() {
+  local file initials="$1"
+
+  if [ -f .git-authors ]
+  then
+    file=.git-authors
+  elif [ -f "$HOME/.git-authors" ]
+  then
+    file="$HOME/.git-authors"
+  else
+    echo "git-duet: no .git-authors file found (repo-local or ~)" >&2
+    exit 1
+  fi
+
+  awk -v target="$initials" '
+    /^[A-Za-z_]+:[ \t]*$/ {
+      key = $1
+      sub(/:$/, "", key)
+      section = (key == "pairs") ? "authors" : key
+      next
+    }
+    /^[ \t]+/ {
+      if (section == "") next
+      line = $0
+      sub(/^[ \t]+/, "", line)
+      colon = index(line, ":")
+      if (colon == 0) next
+      k = substr(line, 1, colon - 1)
+      v = substr(line, colon + 1)
+      sub(/^[ \t]+/, "", v)
+      sub(/[ \t]+$/, "", v)
+      if (section == "authors")          authors[k] = v
+      else if (section == "email" && k == "domain") domain = v
+      else if (section == "email_addresses")        emailaddr[k] = v
+    }
+    END {
+      if (!(target in authors)) {
+        print "git-duet: unknown initials " target > "/dev/stderr"
+        exit 1
+      }
+
+      pairstr = authors[target]
+      semi = index(pairstr, ";")
+      if (semi > 0) {
+        name = substr(pairstr, 1, semi - 1)
+        username = substr(pairstr, semi + 1)
+        sub(/^[ \t]+/, "", username); sub(/[ \t]+$/, "", username)
+      } else {
+        name = pairstr
+        username = ""
+      }
+      sub(/^[ \t]+/, "", name); sub(/[ \t]+$/, "", name)
+
+      if (target in emailaddr) {
+        email = emailaddr[target]
+      } else if (username != "") {
+        email = username "@" domain
+      } else {
+        n = split(name, parts, " ")
+        if (n >= 2) {
+          rest = parts[2]
+          for (i = 3; i <= n; i++) rest = rest " " parts[i]
+          email = tolower(substr(parts[1], 1, 1)) "." tolower(rest) "@" domain
+        } else {
+          email = tolower(name) "@" domain
+        }
+      }
+
+      print name "\t" email
+    }
+  ' "$file"
+}
+
+if [ "$#" -eq 0 ]
+then
+  echo "usage: git duet <initials> [<initials>]" >&2
+  exit 1
+fi
+
+author_line="$(lookup "$1")"
+git config duet.git-author-name "${author_line%%$'\t'*}"
+git config duet.git-author-email "${author_line#*$'\t'}"
+
+if [ -n "${2:-}" ]
+then
+  coauthor_line="$(lookup "$2")"
+  git config duet.coauthor "Co-authored-by: ${coauthor_line%%$'\t'*} <${coauthor_line#*$'\t'}>"
+else
+  git config --unset duet.coauthor 2>/dev/null || true
+fi
+
+echo "GIT_AUTHOR_NAME='$(git config duet.git-author-name)'"
+echo "GIT_AUTHOR_EMAIL='$(git config duet.git-author-email)'"
