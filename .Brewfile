@@ -1,7 +1,6 @@
 tap 'carvel-dev/carvel', trusted: true
 tap 'cloudfoundry/tap', trusted: true
 tap 'git-duet/tap', trusted: true
-tap 'hashicorp/tap', trusted: true
 tap 'heroku/brew', trusted: true
 tap 'neovim/neovim', trusted: true
 tap 'ovh/tap', trusted: true
@@ -13,7 +12,6 @@ brew 'awscli'
 brew 'azure-cli'
 brew 'bash'
 brew 'bash-language-server'
-brew 'bbl'
 brew 'bosh-cli'
 brew 'bitwarden-cli'
 brew 'cabal-install'
@@ -40,7 +38,6 @@ brew 'gopls'  # used by coc.nvim
 brew 'gradle'
 brew 'graphviz'
 brew 'gron'
-brew 'hashicorp/tap/terraform'  # required by bbl
 brew 'helm'
 brew 'heroku'
 brew 'htop'
