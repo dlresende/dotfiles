@@ -107,3 +107,12 @@ fi
 
 echo "GIT_AUTHOR_NAME='$(git config duet.git-author-name)'"
 echo "GIT_AUTHOR_EMAIL='$(git config duet.git-author-email)'"
+
+# Comments (safe under `eval`) confirming both people were registered, since
+# the trailer itself only shows up once a commit is actually made.
+if [ -n "${2:-}" ]
+then
+  echo "# co-author for next commit (via git duet-commit): $(git config duet.coauthor | sed 's/^Co-authored-by: //')"
+else
+  echo "# solo - no co-author set"
+fi
