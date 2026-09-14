@@ -88,6 +88,11 @@ load_homebrew_env() {
   # The installer only prints PATH instructions, it never touches the
   # running shell.
   eval "$(brew shellenv)"
+
+  # brew shellenv unconditionally prepends its own bin dirs, which pushes
+  # rbenv's shims behind them - rbenv shims must always win so rbenv's
+  # ruby, not Homebrew's, is what gets found.
+  export PATH="$HOME/.rbenv/shims:$PATH"
 }
 
 log_tool_versions() {
