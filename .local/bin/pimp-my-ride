@@ -20,12 +20,28 @@ set -o pipefail # fail if any component of any pipe fails
 [[ -z "$DEBUG" ]] || set -x
 
 main() {
+  accept_xcode_license
   switch_to_bash
   install_stuff
   install_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
+}
+
+accept_xcode_license() {
+  [ "$(uname -s)" = 'Darwin' ] || return 0
+
+  # Same detection Homebrew's own installer uses: xcrun fails and mentions
+  # "license" when the Xcode/CLT license hasn't been accepted yet. Building
+  # anything from source - including Homebrew's own install - is blocked
+  # until it is.
+  local output
+  if ! output="$(/usr/bin/xcrun clang 2>&1)" && [[ "$output" == *license* ]]
+  then
+    refresh_admin_credentials
+    sudo xcodebuild -license accept
+  fi
 }
 
 switch_to_bash() {
