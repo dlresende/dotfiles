@@ -1,137 +1,147 @@
-tap 'anomalyco/tap'
-#tap 'carvel-dev/carvel'
-#tap 'git-duet/tap'
-#tap 'hashicorp/tap'
-#tap 'heroku/brew'
-#tap 'neovim/neovim'
+tap 'anomalyco/tap', trusted: true
+tap 'carvel-dev/carvel', trusted: true
+tap 'cloudfoundry/tap', trusted: true
+tap 'git-duet/tap', trusted: true
+tap 'hashicorp/tap', trusted: true
+tap 'heroku/brew', trusted: true
+tap 'neovim/neovim', trusted: true
+tap 'ovh/tap', trusted: true
 
-#brew 'ack'
-#brew 'autoconf'
-#brew 'automake'
-#brew 'awscli'
-#brew 'azure-cli'
+brew 'ack'
+brew 'autoconf'
+brew 'automake'
+brew 'awscli'
+brew 'azure-cli'
 brew 'bash'
 brew 'bash-language-server' # used by coc.nvim
+brew 'bbl'
 brew 'bitwarden-cli'
 brew 'block-goose-cli'
-#brew 'cabal-install'
-#brew 'chruby'
-#brew 'cmake'
-#brew 'coreutils'
-#brew 'csvkit'
-#brew 'direnv'
-#brew 'erlang'
-# brew 'ffmpeg' installed via apt
-#brew 'fontconfig'
-#brew 'freetype'
-#brew 'fzf'
-#brew 'gcc' # required by sbt
-#brew 'gd'
-#brew 'gdbm'
-#brew 'gettext'
-#brew 'gh'
-#brew 'ghc'
+brew 'bosh-cli'
+brew 'cabal-install'
+brew 'chruby'
+brew 'cmake'
+brew 'coreutils'
+brew 'csvkit'
+brew 'direnv'
+brew 'erlang'
+brew 'fontconfig'
+brew 'freetype'
+brew 'fzf'
+brew 'gcc' # required by sbt
+brew 'gd'
+brew 'gdbm'
+brew 'gettext'
+brew 'gh'
+brew 'ghc'
 brew 'git'
-#brew 'git-crypt'
-#brew 'git-duet'
+brew 'git-crypt'
+brew 'git-duet'
 brew 'go'
 brew 'gopls'  # used by coc.nvim
-#brew 'gradle'
-#brew 'graphviz'
-#brew 'gron'
-#brew 'hashicorp/tap/terraform'  # required by bbl
-#brew 'helm'
-#brew 'heroku'
-#brew 'htop'
-#brew 'ipcalc'
-#brew 'java' unless system "/usr/libexec/java_home --failfast"
-#brew 'jemalloc'
-#brew 'jmeter'
-#brew 'jpeg'
+brew 'gradle'
+brew 'graphviz'
+brew 'gron'
+brew 'hashicorp/tap/terraform'  # required by bbl
+brew 'helm'
+brew 'heroku'
+brew 'htop'
+brew 'ipcalc'
+brew 'java' unless system "/usr/libexec/java_home --failfast >/dev/null 2>&1"
+brew 'jemalloc'
+brew 'jmeter'
+brew 'jpeg'
 brew 'jq'
-#brew 'kapp'
-#brew 'kbld'
-#brew 'kind'
+brew 'kapp'
+brew 'kbld'
+brew 'kind'
 brew 'kubectl'
-#brew 'leiningen'
-#brew 'libevent'
-#brew 'libpng'
-#brew 'libssh'
-#brew 'libtermkey'
-#brew 'libtiff'
-#brew 'libtool'
-#brew 'libuv'
-#brew 'libvterm'
-#brew 'libxml2'
-#brew 'libxslt'
-#brew 'libyaml'
-#brew 'lua'
-#brew 'mas'
-#brew 'maven'
-#brew 'msgpack'
+brew 'leiningen'
+brew 'libevent'
+brew 'libpng'
+brew 'libssh'
+brew 'libtermkey'
+brew 'libtiff'
+brew 'libtool'
+brew 'libuv'
+brew 'libvterm'
+brew 'libxml2'
+brew 'libxslt'
+brew 'libyaml'
+brew 'lua'
+brew 'mas' if OS.mac?
+brew 'maven'
+brew 'mr'
+brew 'msgpack'
 brew 'neovim'
-#brew 'ngrep'
-#brew 'nmap'
+brew 'ngrep'
+brew 'nmap'
 brew 'node'
 brew 'oci-cli'
-#brew 'oniguruma'
+brew 'oniguruma'
 brew 'opencode'
-#brew 'openldap'
-brew 'openssl' # required by ruby/rbenv
-brew 'openssh' # required by ruby/rbenv
+brew 'openldap'
+brew 'openjdk'
+brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk" if OS.mac?
+brew 'openssh'
+brew 'openssl'
 brew 'opentofu'
-#brew 'pmd'
-#brew 'python'
-#brew 'python-yq'
+brew 'perl' # required by mr
+brew 'pmd'
+brew 'python'
+brew 'python-yq', args: ['force', 'overwrite']
 brew 'rbenv'
 brew 'readline' # required by ruby/rbenv
-#brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
-#brew 'ripgrep'    # required by coc.nvim
-#brew 'ruby-install'
-#brew 's3cmd'
-#brew 'sbt'
-#brew 'scala'
-#brew 'shellcheck' # used by vim in conjunction with bash-language-server
-#brew 'telnet'
-#brew 'the_silver_searcher'
+brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
+brew 'ripgrep'    # required by coc.nvim
+brew 'ruby-install'
+brew 's3cmd'
+brew 'sbt'
+brew 'scala'
+brew 'shellcheck' # used by vim in conjunction with bash-language-server
+brew 'telnet'
+brew 'the_silver_searcher'
 brew 'tig'
-#brew 'tmate'
+brew 'tmate'
 brew 'tmux'
-#brew 'tree'
-#brew 'typescript'
+brew 'tree'
+brew 'typescript'
 brew 'universal-ctags', args: ['HEAD'] # requried by vim/tagbar
 brew 'vim'
-#brew 'watch'
-#brew 'webp'
-#brew 'wget'
+brew 'watch'
+brew 'webp'
+brew 'wget'
 brew 'xsel' if OS.linux? # required by tmux plugin tmux-yank, and VIm
 brew 'yarn' # required by coc.vim
-#brew 'ytt'
+brew 'ytt'
 brew 'zlib' # required by ruby/rbenv
 
-#cask 'adobe-acrobat-reader'
-#cask 'android-platform-tools'
-#cask 'android-studio'
-#cask 'caffeine' if OS.mac?
-#cask 'docker-desktop'
-#cask 'fly'
-#cask 'flycut'
-#cask 'gcloud-cli'
-#cask 'iterm2' if OS.mac?
-#cask 'libreoffice'
-#cask 'nextcloud'
-# cask 'thunderbird'
-cask 'vlc'
+cask '1password' if OS.mac?
+cask '1password-cli' if OS.mac?
+cask 'adobe-acrobat-reader' if OS.mac?
+cask 'android-platform-tools' if OS.mac?
+cask 'android-studio' if OS.mac?
+cask 'block-goose' if OS.mac?
+cask 'caffeine' if OS.mac?
+cask 'claude-code' if OS.mac?
+cask 'docker-desktop' if OS.mac?
+cask 'flycut' if OS.mac?
+cask 'gcloud-cli' if OS.mac?
+cask 'iterm2' if OS.mac?
+cask 'libreoffice' if OS.mac?
+cask 'nextcloud' if OS.mac?
+cask 'ovhcloud-cli' if OS.mac?
+cask 'thunderbird' if OS.mac?
+cask 'vlc' if OS.mac?
 
-#mas 'Xcode', id: 497799835
+mas 'Xcode', id: 497799835 if OS.mac?
 
-# flatpak 'org.mozilla.firefox'
-flatpak 'com.mattjakeman.ExtensionManager'
-flatpak 'com.protonvpn.www'
-flatpak 'com.slack.Slack'
-flatpak 'com.spotify.Client'
-flatpak 'org.audacityteam.Audacity'
-flatpak 'org.chromium.Chromium'
-flatpak 'org.libreoffice.LibreOffice'
-flatpak 'org.mozilla.thunderbird_esr'
-flatpak 'org.videolan.VLC'
+flatpak 'com.mattjakeman.ExtensionManager' if OS.linux?
+flatpak 'com.protonvpn.www' if OS.linux?
+flatpak 'com.slack.Slack' if OS.linux?
+flatpak 'com.spotify.Client' if OS.linux?
+flatpak 'org.audacityteam.Audacity' if OS.linux?
+flatpak 'org.chromium.Chromium' if OS.linux?
+flatpak 'org.libreoffice.LibreOffice' if OS.linux?
+flatpak 'org.mozilla.thunderbird_esr' if OS.linux?
+flatpak 'org.videolan.VLC' if OS.linux?
