@@ -67,6 +67,27 @@ install_stuff() {
         flatpak \
         gnome-software-plugin-flatpak
 
+      # Allow members of sudo to install Flatpaks without interactive polkit prompt
+      if [ -d /etc/polkit-1/rules.d ]; then
+        sudo tee /etc/polkit-1/rules.d/49-flatpak.rules > /dev/null << 'EOF'
+polkit.addRule(function(action, subject) {
+    if (action.id.indexOf("org.freedesktop.Flatpak.") === 0 && subject.isInGroup("sudo")) {
+        return polkit.Result.YES;
+    }
+});
+EOF
+      fi
+      if [ -d /etc/polkit-1/localauthority/50-local.d ]; then
+        sudo tee /etc/polkit-1/localauthority/50-local.d/45-flatpak.pkla > /dev/null << 'EOF'
+[Allow sudo to install flatpaks]
+Identity=unix-group:sudo
+Action=org.freedesktop.Flatpak.*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+      fi
+
       sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       ;;
   esac
