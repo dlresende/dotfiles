@@ -6,11 +6,23 @@
 OS="$(uname -s)"
 
 # So `command -v brew` finds an existing install regardless of whether this
-# script was launched from a shell that sourced .exports.
+# script was launched from a shell that sourced .exports. Only prepend if
+# missing - .bashrc already puts rbenv shims ahead of Homebrew's own bin,
+# and unconditionally prepending here would undo that ordering.
+homebrew_bin=""
 case "$OS" in
-  Darwin) export PATH="/opt/homebrew/bin:$PATH" ;;
-  Linux)  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" ;;
+  Darwin) homebrew_bin=/opt/homebrew/bin ;;
+  Linux)  homebrew_bin=/home/linuxbrew/.linuxbrew/bin ;;
 esac
+
+if [ -n "$homebrew_bin" ]
+then
+  case ":$PATH:" in
+    *":$homebrew_bin:"*) ;;
+    *) export PATH="$homebrew_bin:$PATH" ;;
+  esac
+fi
+unset homebrew_bin
 
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
