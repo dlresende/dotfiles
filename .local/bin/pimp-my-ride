@@ -30,17 +30,17 @@ main() {
   configure_git
 }
 
+refresh_admin_credentials() {
+  # Primes a sudo ticket so later sudo calls in this run - Homebrew's own
+  # NONINTERACTIVE installer checks access with `sudo -n`, which never
+  # prompts, and Linux's apt/systemd steps need sudo too - don't have to
+  # prompt again.
+  sudo -v
+}
+
 accept_xcode_license() {
-  # Same detection Homebrew's own installer uses: xcrun fails and mentions
-  # "license" when the Xcode/CLT license hasn't been accepted yet. Building
-  # anything from source - including Homebrew's own install - is blocked
-  # until it is.
-  local output
-  if ! output="$(/usr/bin/xcrun clang 2>&1)" && [[ "$output" == *license* ]]
-  then
-    refresh_admin_credentials
-    sudo xcodebuild -license accept
-  fi
+  refresh_admin_credentials
+  sudo xcodebuild -license accept
 }
 
 switch_to_bash() {
@@ -76,12 +76,6 @@ ensure_homebrew_installed() {
   refresh_admin_credentials
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   load_homebrew_env
-}
-
-refresh_admin_credentials() {
-  # Homebrew's NONINTERACTIVE installer checks sudo access with `sudo -n`,
-  # which never prompts - prime a ticket so that check finds one cached.
-  sudo -v
 }
 
 load_homebrew_env() {
