@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Commits using whatever pair `git duet` last set for this repository.
+
+set -euo pipefail
+
+author_name="$(git config duet.git-author-name 2>/dev/null || true)"
+author_email="$(git config duet.git-author-email 2>/dev/null || true)"
+coauthor="$(git config duet.coauthor 2>/dev/null || true)"
+
+args=()
+[ -n "$coauthor" ] && args=(--trailer "$coauthor")
+
+if [ -n "$author_name" ] && [ -n "$author_email" ]
+then
+  export GIT_AUTHOR_NAME="$author_name"
+  export GIT_AUTHOR_EMAIL="$author_email"
+fi
+
+exec git commit "${args[@]+"${args[@]}"}" "$@"
