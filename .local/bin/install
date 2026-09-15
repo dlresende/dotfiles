@@ -8,6 +8,15 @@ set -o pipefail # fail if any component of any pipe fails
 
 ( cd "$HOME" || exit 1
 
+  # On a genuinely fresh Mac, /usr/bin/git (provided by the Xcode Command
+  # Line Tools) refuses to run at all until this is accepted - and that's
+  # every git command below, starting right after this.
+  if [ "$(uname -s)" = 'Darwin' ]
+  then
+    sudo -v
+    sudo xcodebuild -license accept
+  fi
+
   if ! command -v git &> /dev/null
   then
     >&2 cat <<EOF
@@ -19,13 +28,13 @@ EOF
 
   if [ -d .git ]
   then
-    echo "dotfiles repo already exists in ~. Skipping checkout..."
+    echo "dotfiles repo already exists in ~. Updating to the latest macOS..."
   else
     git init
     git remote add origin https://github.com/dlresende/dotfiles.git
-    git fetch --all
-    git reset --hard origin/linux
   fi
+
+  git pull origin macOS
 
   .local/bin/pimp-my-ride
 )
