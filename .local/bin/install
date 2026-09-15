@@ -28,13 +28,13 @@ EOF
 
   if [ -d .git ]
   then
-    echo "dotfiles repo already exists in ~. Updating to the latest macOS..."
+    echo "dotfiles repo already exists in ~. Updating to the latest main..."
   else
     git init
     git remote add origin https://github.com/dlresende/dotfiles.git
   fi
 
-  git pull origin macOS
+  git pull origin main
 
   .local/bin/pimp-my-ride
 )
