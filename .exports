@@ -1,6 +1,9 @@
 # vim: ft=bash
 # vim: foldmethod=indent
 
+OS="$(uname -s)"
+export OS
+
 # Make vim the default editor
 export EDITOR="vim";
 
@@ -20,7 +23,7 @@ export LC_ALL="en_GB.UTF-8";
 #RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 #export RUBY_CONFIGURE_OPTS
 
-case "$( uname -s )" in
+case "$OS" in
   Linux)
     # Make sure Ruby links to the system zlib (installed via Homebrew) during rbenv compilation
     if command -v brew > /dev/null 2>&1; then
