@@ -2,9 +2,9 @@
 name: install
 on:
   push:
-    branches: [ linux ]
+    branches: [ macOS, linux ]
   pull_request:
-    branches: [ linux ]
+    branches: [ macOS, linux ]
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,9 +17,17 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ macos-latest, ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
     # Without this a hang costs the 6h job ceiling instead of failing fast.
     timeout-minutes: 45
+    env:
+      # `mas` needs an App Store sign-in the runner does not have, so Xcode
+      # would block until the job is killed. This is a space-separated list
+      # of app names/ids to skip, not a boolean - `1` was a silent no-op.
+      HOMEBREW_BUNDLE_MAS_SKIP: 497799835
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,6 +36,7 @@ jobs:
           # workspace below, so don't leave a token behind in .git/config
           persist-credentials: false
       - name: Configure Flatpak polkit rules for headless CI
+        if: runner.os == 'Linux'
         run: |
           if [ -d /etc/polkit-1/rules.d ]; then
             sudo tee /etc/polkit-1/rules.d/49-flatpak.rules > /dev/null << 'EOF'
