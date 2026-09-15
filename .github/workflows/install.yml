@@ -28,4 +28,4 @@ jobs:
           # workspace below, so don't leave a token behind in .git/config
           persist-credentials: false
       - run: echo "HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-      - run: source .bashrc && DEBUG=1 .local/bin/install
+      - run: source .bashrc && DEBUG=1 .local/bin/pimp-my-ride
