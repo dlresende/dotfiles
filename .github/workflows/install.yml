@@ -27,5 +27,27 @@ jobs:
           # installer, rbenv-doctor, tpm plugins), and HOME is set to the
           # workspace below, so don't leave a token behind in .git/config
           persist-credentials: false
+      - name: Configure Flatpak polkit rules for headless CI
+        run: |
+          if [ -d /etc/polkit-1/rules.d ]; then
+            sudo tee /etc/polkit-1/rules.d/49-flatpak.rules > /dev/null << 'EOF'
+          polkit.addRule(function(action, subject) {
+              if (action.id.indexOf("org.freedesktop.Flatpak") === 0 ||
+                  action.id.indexOf("org.freedesktop.flatpak") === 0) {
+                  return polkit.Result.YES;
+              }
+          });
+          EOF
+          fi
+          if [ -d /etc/polkit-1/localauthority/50-local.d ]; then
+            sudo tee /etc/polkit-1/localauthority/50-local.d/45-flatpak.pkla > /dev/null << 'EOF'
+          [Allow all users to manage flatpak]
+          Identity=unix-user:*
+          Action=org.freedesktop.Flatpak.*;org.freedesktop.flatpak.*
+          ResultAny=yes
+          ResultInactive=yes
+          ResultActive=yes
+          EOF
+          fi
       - run: echo "HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       - run: source .bashrc && DEBUG=1 .local/bin/pimp-my-ride
