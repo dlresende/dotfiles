@@ -62,14 +62,3 @@ export PS1="\n\$([ \$? -gt 0 ] && printf '\[\033[31m\]'; printf '; \[\033[0m\]')
 
 export HOMEBREW_BUNDLE_FILE_GLOBAL="${HOME}/.Brewfile"
 export HOMEBREW_NO_ASK=1
-
-case "$( uname -s )" in
-  Linux)
-    export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
-    export HOMEBREW_CELLAR="${HOMEBREW_PREFIX}/Cellar";
-    export HOMEBREW_REPOSITORY="${HOMEBREW_PREFIX}/Homebrew";
-    export PATH="${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin${PATH+:$PATH}";
-    [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
-    export INFOPATH="${HOMEBREW_PREFIX}/share/info:${INFOPATH:-}";
-    ;;
-esac
