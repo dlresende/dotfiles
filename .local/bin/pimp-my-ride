@@ -50,6 +50,14 @@ refresh_admin_credentials() {
 
 accept_xcode_license() {
   refresh_admin_credentials
+
+  # A Command Line Tools update can silently reset the active developer
+  # directory back to itself even after Xcode is installed - xcodebuild
+  # then refuses to run at all. Skipped on a fresh machine where Xcode
+  # isn't installed yet; CLT alone is enough for xcodebuild's own license
+  # prompt in that case.
+  [ -d /Applications/Xcode.app ] && sudo xcode-select -s /Applications/Xcode.app
+
   sudo xcodebuild -license accept
 }
 
