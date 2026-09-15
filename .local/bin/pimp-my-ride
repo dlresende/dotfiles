@@ -16,7 +16,7 @@ export HOMEBREW_PREFIX
 # script was launched from a shell that sourced .exports. Appending, not
 # prepending, means this can never outrank .bashrc's own ordering (rbenv
 # shims ahead of Homebrew's bin) - safe to always run, no guard needed.
-export PATH="$PATH:$HOMEBREW_PREFIX/bin"
+[ -n "$HOMEBREW_PREFIX" ] && export PATH="$PATH:$HOMEBREW_PREFIX/bin"
 
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
@@ -34,6 +34,11 @@ main() {
   configure_vim
   configure_tmux
   configure_git
+  case "$OS" in
+    Linux)
+      configure_ubuntu
+      ;;
+  esac
 }
 
 refresh_admin_credentials() {
@@ -62,6 +67,49 @@ install_stuff() {
   else
     noise_level='--debug'
   fi
+  
+  case "$OS" in
+    Linux)
+      # Install Homebrew dependencies
+      # https://docs.brew.sh/Homebrew-on-Linux#requirements
+      sudo apt-get install --yes \
+        build-essential \
+        procps \
+        curl \
+        file \
+        git
+
+      # Install Flatpak so we can manage more app installations from Homebrew
+      # https://flatpak.org/setup/Ubuntu
+      sudo apt-get install --yes \
+        flatpak \
+        gnome-software-plugin-flatpak
+
+      # Allow users to install Flatpaks without interactive polkit prompt
+      if [ -d /etc/polkit-1/rules.d ]; then
+        sudo tee /etc/polkit-1/rules.d/49-flatpak.rules > /dev/null << 'EOF'
+polkit.addRule(function(action, subject) {
+    if (action.id.indexOf("org.freedesktop.Flatpak") === 0 ||
+        action.id.indexOf("org.freedesktop.flatpak") === 0) {
+        return polkit.Result.YES;
+    }
+});
+EOF
+      fi
+      if [ -d /etc/polkit-1/localauthority/50-local.d ]; then
+        sudo tee /etc/polkit-1/localauthority/50-local.d/45-flatpak.pkla > /dev/null << 'EOF'
+[Allow all users to manage flatpak]
+Identity=unix-user:*
+Action=org.freedesktop.Flatpak.*;org.freedesktop.flatpak.*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
+EOF
+      fi
+
+      sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+      ;;
+  esac
 
   ensure_homebrew_installed
 
@@ -153,6 +201,19 @@ configure_go_workspace() {
 
 configure_git() {
   ln -sf "${HOME}/.local/bin/git/hooks/pre-commit" "${HOME}/.git/hooks"
+}
+
+configure_ubuntu() {
+  local conf="${HOME}/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf"
+
+  if [ ! -f "$conf" ]
+  then
+    echo "configure_ubuntu: missing $conf" >&2
+    return 1
+  fi
+
+  sudo mkdir -p /etc/systemd/logind.conf.d/
+  sudo cp "$conf" /etc/systemd/logind.conf.d/
 }
 
 main
