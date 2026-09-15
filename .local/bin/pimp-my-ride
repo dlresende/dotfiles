@@ -3,15 +3,20 @@
 : "${DEBUG:=}"
 : "${HOMEBREW_BUNDLE_FILE_GLOBAL:=$HOME/.Brewfile}"
 
+OS="$(uname -s)"
+
+case "$OS" in
+  Darwin) : "${HOMEBREW_PREFIX:=/opt/homebrew}" ;;
+  Linux)  : "${HOMEBREW_PREFIX:=/home/linuxbrew/.linuxbrew}" ;;
+  *)      : "${HOMEBREW_PREFIX:=}" ;;
+esac
+export HOMEBREW_PREFIX
+
 # So `command -v brew` finds an existing install regardless of whether this
-# script was launched from a shell that sourced .exports. Homebrew's
-# install locations are fixed per OS, so try both rather than branching on
-# uname.
-for homebrew_bin in /opt/homebrew/bin /home/linuxbrew/.linuxbrew/bin
-do
-  [ -d "$homebrew_bin" ] && export PATH="$homebrew_bin:$PATH"
-done
-unset homebrew_bin
+# script was launched from a shell that sourced .exports. Appending, not
+# prepending, means this can never outrank .bashrc's own ordering (rbenv
+# shims ahead of Homebrew's bin) - safe to always run, no guard needed.
+[ -n "$HOMEBREW_PREFIX" ] && export PATH="$PATH:$HOMEBREW_PREFIX/bin"
 
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
@@ -20,17 +25,33 @@ set -o pipefail # fail if any component of any pipe fails
 [[ -z "$DEBUG" ]] || set -x
 
 main() {
+  case "$OS" in
+    Darwin) accept_xcode_license ;;
+  esac
   switch_to_bash
   install_stuff
   install_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
-  case "$( uname -s )" in
+  case "$OS" in
     Linux)
       configure_ubuntu
       ;;
   esac
+}
+
+refresh_admin_credentials() {
+  # Primes a sudo ticket so later sudo calls in this run - Homebrew's own
+  # NONINTERACTIVE installer checks access with `sudo -n`, which never
+  # prompts, and Linux's apt/systemd steps need sudo too - don't have to
+  # prompt again.
+  sudo -v
+}
+
+accept_xcode_license() {
+  refresh_admin_credentials
+  sudo xcodebuild -license accept
 }
 
 switch_to_bash() {
@@ -47,7 +68,7 @@ install_stuff() {
     noise_level='--debug'
   fi
   
-  case "$( uname -s )" in
+  case "$OS" in
     Linux)
       # Install Homebrew dependencies
       # https://docs.brew.sh/Homebrew-on-Linux#requirements
@@ -109,12 +130,6 @@ ensure_homebrew_installed() {
   refresh_admin_credentials
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   load_homebrew_env
-}
-
-refresh_admin_credentials() {
-  # Homebrew's NONINTERACTIVE installer checks sudo access with `sudo -n`,
-  # which never prompts - prime a ticket so that check finds one cached.
-  sudo -v
 }
 
 load_homebrew_env() {
