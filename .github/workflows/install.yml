@@ -2,9 +2,9 @@
 name: install
 on:
   push:
-    branches: [ main, linux ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, linux ]
+    branches: [ main ]
   workflow_dispatch:
 permissions:
   contents: read
