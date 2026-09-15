@@ -2,9 +2,9 @@
 name: install
 on:
   push:
-    branches: [ macOS, linux ]
+    branches: [ main ]
   pull_request:
-    branches: [ macOS, linux ]
+    branches: [ main ]
   workflow_dispatch:
 permissions:
   contents: read
