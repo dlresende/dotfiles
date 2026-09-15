@@ -2,8 +2,7 @@
 
 : "${DEBUG:=}"
 : "${HOMEBREW_BUNDLE_FILE_GLOBAL:=$HOME/.Brewfile}"
-
-OS="$(uname -s)"
+: "${OS:=$(uname -s)}"
 
 case "$OS" in
   Darwin) : "${HOMEBREW_PREFIX:=/opt/homebrew}" ;;
