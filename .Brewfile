@@ -72,7 +72,7 @@ brew 'ngrep'
 brew 'nmap'
 brew 'node'
 brew 'oci-cli'
-brew 'opencode'
+brew 'opencode' if OS.linux?
 brew 'openldap'
 brew 'openjdk'
 brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk" if OS.mac?
@@ -104,7 +104,7 @@ brew 'wget'
 brew 'xsel' if OS.linux? # required by tmux plugin tmux-yank, and VIm
 brew 'yarn' # required by coc.vim
 brew 'ytt'
-brew 'zlib' # required by ruby/rbenv
+brew 'zlib' if OS.linux? # required by ruby/rbenv
 
 cask '1password' if OS.mac?
 cask '1password-cli' if OS.mac?
