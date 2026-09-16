@@ -44,7 +44,6 @@ brew 'htop'
 brew 'ipcalc'
 brew 'java' unless system "/usr/libexec/java_home --failfast >/dev/null 2>&1"
 brew 'jemalloc'
-brew 'jmeter'
 brew 'jpeg'
 brew 'jq'
 brew 'kapp'
@@ -73,7 +72,6 @@ brew 'ngrep'
 brew 'nmap'
 brew 'node'
 brew 'oci-cli'
-brew 'oniguruma'
 brew 'opencode' if OS.linux?
 brew 'openldap'
 brew 'openjdk'
@@ -90,14 +88,11 @@ brew 'readline' # required by ruby/rbenv
 brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
 brew 'ripgrep'    # required by coc.nvim
 brew 'ruby-install'
-brew 's3cmd'
 brew 'sbt'
 brew 'scala'
 brew 'shellcheck' # used by vim in conjunction with bash-language-server
 brew 'telnet' if OS.mac?
-brew 'the_silver_searcher'
 brew 'tig'
-brew 'tmate'
 brew 'tmux'
 brew 'tree'
 brew 'typescript'
