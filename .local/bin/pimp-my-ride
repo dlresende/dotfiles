@@ -62,6 +62,10 @@ accept_xcode_license() {
 }
 
 switch_to_bash() {
+  # CI runners are ephemeral and don't need a login-shell change - and
+  # chsh needs a real password prompt (PAM) it can never satisfy here.
+  [ -n "${CI:-}" ] && return
+
   local bash_path="$HOMEBREW_PREFIX/bin/bash"
 
   # The OS-provided bash (Apple's ancient 3.2, kept frozen for GPL licensing
