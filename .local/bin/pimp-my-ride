@@ -62,7 +62,19 @@ accept_xcode_license() {
 }
 
 switch_to_bash() {
-  [ "$SHELL" = '/bin/bash' ] || chsh -s /bin/bash
+  local bash_path="$HOMEBREW_PREFIX/bin/bash"
+
+  # The OS-provided bash (Apple's ancient 3.2, kept frozen for GPL licensing
+  # reasons; distros' own default shell otherwise) has job-control bugs that
+  # misbehave under tmux - spurious "child setpgid: Operation not permitted"
+  # warnings on every piped command.
+  if ! grep -qxF "$bash_path" /etc/shells
+  then
+    refresh_admin_credentials
+    echo "$bash_path" | sudo tee -a /etc/shells > /dev/null
+  fi
+
+  [ "$SHELL" = "$bash_path" ] || chsh -s "$bash_path"
 }
 
 install_stuff() {
