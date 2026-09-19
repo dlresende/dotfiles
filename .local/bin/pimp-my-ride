@@ -77,6 +77,8 @@ install_stuff() {
   
   case "$OS" in
     Linux)
+      sudo apt-get update
+
       # Install Homebrew dependencies
       # https://docs.brew.sh/Homebrew-on-Linux#requirements
       sudo apt-get install --yes \
