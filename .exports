@@ -4,6 +4,23 @@
 OS="$(uname -s)"
 export OS
 
+# Hardcoded per-OS rather than derived from `brew shellenv`, which needs
+# brew already on PATH - not yet true right after a fresh install.
+# HOMEBREW_REPOSITORY isn't just HOMEBREW_PREFIX on Linux (bin/brew there
+# is a symlink into a nested repo directory).
+case "$OS" in
+  Darwin)
+    HOMEBREW_PREFIX=/opt/homebrew
+    HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX"
+    ;;
+  Linux)
+    HOMEBREW_PREFIX=/home/linuxbrew/.linuxbrew
+    HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
+    ;;
+esac
+HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
+export HOMEBREW_PREFIX HOMEBREW_CELLAR HOMEBREW_REPOSITORY
+
 # Make vim the default editor
 export EDITOR="vim";
 
@@ -22,16 +39,6 @@ export LC_ALL="en_GB.UTF-8";
 # is upgraded).
 #RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 #export RUBY_CONFIGURE_OPTS
-
-case "$OS" in
-  Linux)
-    # Make sure Ruby links to the system zlib (installed via Homebrew) during rbenv compilation
-    if command -v brew > /dev/null 2>&1; then
-      RUBY_CONFIGURE_OPTS="--with-zlib-dir=$(brew --prefix zlib)"
-      export RUBY_CONFIGURE_OPTS
-    fi
-    ;;
-esac
 
 # rbenv
 export RBENV_SHELL=bash

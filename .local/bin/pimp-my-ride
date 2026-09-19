@@ -149,6 +149,14 @@ log_tool_versions() {
 }
 
 install_ruby() {
+  # Link against Homebrew's zlib (installed by install_stuff above) rather
+  # than a stale system one, when present.
+  case "$OS" in
+    Linux)
+      [ -d "$HOMEBREW_PREFIX/opt/zlib" ] && export RUBY_CONFIGURE_OPTS="--with-zlib-dir=$HOMEBREW_PREFIX/opt/zlib"
+      ;;
+  esac
+
   rbenv install --skip-existing "$(rbenv install -l | grep -v - | tail -1)"
 }
 
