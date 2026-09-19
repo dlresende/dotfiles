@@ -77,8 +77,6 @@ install_stuff() {
   
   case "$OS" in
     Linux)
-      # CI runners' package indexes can go stale between image builds,
-      # causing 404s against mirrors that have since rotated out packages.
       sudo apt-get update
 
       # Install Homebrew dependencies
