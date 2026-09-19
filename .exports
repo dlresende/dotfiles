@@ -56,8 +56,10 @@ export HISTCONTROL=ignoredups:erasedups
 # Only save successful commands to history file (keep failed commands in memory for current session)
 # Capture the command text before it executes (DEBUG trap runs before each command)
 trap '_last_cmd_text=$(history 1 | sed "s/^[ ]*[0-9]*[ ]*//")' DEBUG
-# Write successful commands immediately to file, failed ones stay in memory only
-export PROMPT_COMMAND='_last_exit=$?; _direnv_hook; if [[ $_last_exit -eq 0 ]] && [[ -n "$_last_cmd_text" ]]; then echo "$_last_cmd_text" >> ~/.bash_history; fi; unset _last_exit _last_cmd_text'
+# Write successful commands immediately to file, failed ones stay in memory only.
+# No space around `;_direnv_hook;` - direnv's hook checks for that exact
+# substring before appending itself, and would otherwise fire twice per prompt.
+export PROMPT_COMMAND='_last_exit=$?;_direnv_hook; if [[ $_last_exit -eq 0 ]] && [[ -n "$_last_cmd_text" ]]; then echo "$_last_cmd_text" >> ~/.bash_history; fi; unset _last_exit _last_cmd_text'
 
 # Do not add commands starting with space, cd or ls to the history
 # export HISTIGNORE=' *:cd*:ls*'
