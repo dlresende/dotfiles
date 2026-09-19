@@ -33,9 +33,9 @@ export GOPATH
 
 PATH="${GOPATH}/bin:${PATH}"
 
-# Configure Java
-if [ "${OS:?}" = 'Darwin' ]; then
-  JAVA_HOME="$(/usr/libexec/java_home)"
+# Configure Java. java_home fails when no JVM is registered yet - e.g. a
+# fresh machine, before pimp-my-ride's brew bundle has installed one.
+if [ "${OS:?}" = 'Darwin' ] && JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null)"; then
   export JAVA_HOME
   PATH="${JAVA_HOME}/bin:${PATH}"
 fi

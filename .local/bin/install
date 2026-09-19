@@ -36,5 +36,7 @@ EOF
 
   git pull origin main
 
+  # shellcheck source=/dev/null
+  source ~/.bashrc
   .local/bin/pimp-my-ride
 )

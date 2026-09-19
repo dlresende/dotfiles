@@ -108,26 +108,14 @@ install_stuff() {
 }
 
 ensure_homebrew_installed() {
-  if command -v brew &> /dev/null
-  then
-    load_homebrew_env
-    return
-  fi
+  # .bashrc (sourced by install/CI before this script runs) already puts
+  # HOMEBREW_PREFIX/bin on PATH regardless of whether brew exists there yet,
+  # so it's immediately resolvable the moment the installer below finishes -
+  # no need to re-derive the environment from `brew shellenv` afterwards.
+  command -v brew &> /dev/null && return
 
   refresh_admin_credentials
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  load_homebrew_env
-}
-
-load_homebrew_env() {
-  # The installer only prints PATH instructions, it never touches the
-  # running shell.
-  eval "$(brew shellenv)"
-
-  # brew shellenv unconditionally prepends its own bin dirs, which pushes
-  # rbenv's shims behind them - rbenv shims must always win so rbenv's
-  # ruby, not Homebrew's, is what gets found.
-  export PATH="$HOME/.rbenv/shims:$PATH"
 }
 
 log_tool_versions() {
