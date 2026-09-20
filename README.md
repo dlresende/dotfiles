@@ -7,12 +7,12 @@ Personal cross-platform dotfiles and bootstrap system for macOS and Linux (Ubunt
 To bootstrap a fresh machine:
 
 ```bash
-curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install | bash
+curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
 ```
 
 ### Bootstrap Workflow
 
-1. **`.local/bin/install`**: Initializes or updates the dotfiles repository in `~` from `main`, accepts the Xcode license on macOS, and runs `pimp-my-ride`.
+1. **`.local/bin/install.sh`**: Initializes or updates the dotfiles repository in `~` from `main`, accepts the Xcode license on macOS, and runs `pimp-my-ride`.
 2. **`.local/bin/pimp-my-ride`**: Automates full environment configuration:
    - Installs system packages (apt & Flatpak on Linux, Homebrew on macOS/Linux).
    - Runs `brew bundle` using `.Brewfile` to install CLI tools, GUI applications (macOS casks / Linux Flatpaks), and fonts.
@@ -41,7 +41,7 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install | bash
 ├── .XCompose              # Custom character composition keys (Linux)
 └── .local/
     ├── bin/               # Custom CLI scripts & utilities
-    │   ├── install        # Remote bootstrap installer
+    │   ├── install.sh     # Remote bootstrap installer
     │   ├── pimp-my-ride   # Machine setup & package provisioning
     │   ├── git-duet       # Pair programming identity management
     │   ├── git-duet-commit# Git commit wrapper with duet authoring

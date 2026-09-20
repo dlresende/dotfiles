@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Named install.sh (not install) so ~/.local/bin does not shadow POSIX /usr/bin/install in PATH
+
 [ -z "$DEBUG" ] || set -x
 
 set -e # bail out early if any command fails
