@@ -58,3 +58,18 @@ jobs:
           fi
       - run: echo "HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       - run: source .bashrc && DEBUG=1 .local/bin/pimp-my-ride
+      - name: Verify a fresh shell can find Homebrew and its tools
+        # pimp-my-ride sets up its own environment independently of .bashrc,
+        # so its success alone never proves a *new* shell (opened after
+        # install, the way a human actually uses this) is configured
+        # correctly. Simulate that explicitly.
+        run: |
+          bash -c '
+            set -euo pipefail
+            source ~/.bashrc
+            echo "HOMEBREW_PREFIX=$HOMEBREW_PREFIX"
+            [ -n "$HOMEBREW_PREFIX" ]
+            [ "$(command -v brew)" = "$HOMEBREW_PREFIX/bin/brew" ]
+            command -v git
+            command -v tmux
+          '

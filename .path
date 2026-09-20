@@ -17,8 +17,14 @@
 
 export PATH
 
-# Add Homebrew's "sbin". Some formulae put executables in /usr/local/sbin.
-PATH="${HOMEBREW_PREFIX}/bin:/usr/local/sbin:${PATH}"
+# Some formulae put executables in /usr/local/sbin.
+PATH="/usr/local/sbin:${PATH}"
+
+# Homebrew's bin/sbin/info. HOMEBREW_PREFIX comes from .exports - see .bashrc.
+: "${HOMEBREW_PREFIX:?}"
+PATH="${HOMEBREW_PREFIX}/bin:${HOMEBREW_PREFIX}/sbin:${PATH}"
+INFOPATH="${HOMEBREW_PREFIX}/share/info:${INFOPATH:-}"
+export INFOPATH
 
 # GOPATH is a variable that defines the root of the workspace. The go get tool
 # downloads packages to the first directory in GOPATH.
@@ -27,9 +33,9 @@ export GOPATH
 
 PATH="${GOPATH}/bin:${PATH}"
 
-# Configure Java
-if [ "${OS:-$(uname -s)}" = 'Darwin' ]; then
-  JAVA_HOME="$(/usr/libexec/java_home)"
+# Configure Java. java_home fails when no JVM is registered yet - e.g. a
+# fresh machine, before pimp-my-ride's brew bundle has installed one.
+if [ "${OS:?}" = 'Darwin' ] && JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null)"; then
   export JAVA_HOME
   PATH="${JAVA_HOME}/bin:${PATH}"
 fi
