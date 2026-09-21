@@ -215,7 +215,8 @@ configure_macos() {
   fi
 
   defaults import com.apple.symbolichotkeys "$shortcuts"
-  killall cfprefsd 2>/dev/null || true
+  defaults read com.apple.symbolichotkeys > /dev/null
+  /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 }
 
 configure_ubuntu() {
