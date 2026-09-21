@@ -65,23 +65,14 @@ accept_xcode_license() {
 }
 
 switch_to_bash() {
-  # CI runners are ephemeral and don't need a login-shell change - and
-  # chsh needs a real password prompt (PAM) it can never satisfy here.
-  [ -n "${CI:-}" ] && return
+  [ -n "${SHELL:-}" ] || return 0
 
-  local bash_path="$HOMEBREW_PREFIX/bin/bash"
-
-  # The OS-provided bash (Apple's ancient 3.2, kept frozen for GPL licensing
-  # reasons; distros' own default shell otherwise) has job-control bugs that
-  # misbehave under tmux - spurious "child setpgid: Operation not permitted"
-  # warnings on every piped command.
-  if ! grep -qxF "$bash_path" /etc/shells
+  # Register modern bash in /etc/shells so it is recognized as a valid shell
+  if ! grep -qxF "$SHELL" /etc/shells
   then
     refresh_admin_credentials
-    echo "$bash_path" | sudo tee -a /etc/shells > /dev/null
+    echo "$SHELL" | sudo tee -a /etc/shells > /dev/null
   fi
-
-  [ "$SHELL" = "$bash_path" ] || chsh -s "$bash_path"
 }
 
 install_stuff() {
