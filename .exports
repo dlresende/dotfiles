@@ -21,6 +21,13 @@ esac
 HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
 export HOMEBREW_PREFIX HOMEBREW_CELLAR HOMEBREW_REPOSITORY
 
+# Set SHELL to Homebrew bash if available, falling back to /bin/bash
+if [ -x "$HOMEBREW_PREFIX/bin/bash" ]; then
+  export SHELL="$HOMEBREW_PREFIX/bin/bash"
+elif [ -x /bin/bash ]; then
+  export SHELL=/bin/bash
+fi
+
 # Make vim the default editor
 export EDITOR="vim";
 
