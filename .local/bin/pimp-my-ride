@@ -26,6 +26,7 @@ set -o pipefail # fail if any component of any pipe fails
 main() {
   case "$OS" in
     Darwin) accept_xcode_license ;;
+    Linux)  configure_ubuntu ;;
   esac
   switch_to_bash
   install_stuff
@@ -36,9 +37,6 @@ main() {
   case "$OS" in
     Darwin)
       configure_macos
-      ;;
-    Linux)
-      configure_ubuntu
       ;;
   esac
 }
@@ -211,16 +209,14 @@ configure_macos() {
 }
 
 configure_ubuntu() {
-  local conf="${HOME}/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf"
-
-  if [ ! -f "$conf" ]
-  then
-    echo "configure_ubuntu: missing $conf" >&2
-    return 1
-  fi
+  refresh_admin_credentials
 
   sudo mkdir -p /etc/systemd/logind.conf.d/
-  sudo cp "$conf" /etc/systemd/logind.conf.d/
+  sudo cp "${HOME}/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf" /etc/systemd/logind.conf.d/
+
+  sudo mkdir -p /etc/NetworkManager/conf.d/
+  sudo cp "${HOME}/.local/etc/NetworkManager/conf.d/disable-wifi-powersave.conf" /etc/NetworkManager/conf.d/
+  sudo systemctl reload NetworkManager 2> /dev/null || true
 }
 
 main
