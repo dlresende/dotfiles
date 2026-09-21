@@ -115,6 +115,7 @@ cask 'block-goose' if OS.mac?
 cask 'caffeine' if OS.mac?
 cask 'claude-code' if OS.mac?
 cask 'docker-desktop' if OS.mac?
+cask 'firefox' if OS.mac?
 #cask 'fly'
 cask 'flycut' if OS.mac?
 cask 'gcloud-cli' if OS.mac?
