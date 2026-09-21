@@ -34,6 +34,9 @@ main() {
   configure_tmux
   configure_git
   case "$OS" in
+    Darwin)
+      configure_macos
+      ;;
     Linux)
       configure_ubuntu
       ;;
@@ -200,6 +203,19 @@ configure_go_workspace() {
 
 configure_git() {
   ln -sf "${HOME}/.local/bin/git/hooks/pre-commit" "${HOME}/.git/hooks"
+}
+
+configure_macos() {
+  local shortcuts="${HOME}/.local/etc/macos/com.apple.symbolichotkeys.plist"
+
+  if [ ! -f "$shortcuts" ]
+  then
+    echo "configure_macos: missing $shortcuts" >&2
+    return 1
+  fi
+
+  defaults import com.apple.symbolichotkeys "$shortcuts"
+  killall cfprefsd 2>/dev/null || true
 }
 
 configure_ubuntu() {
