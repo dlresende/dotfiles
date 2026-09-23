@@ -5,60 +5,28 @@ on:
     branches: [ main ]
   workflow_dispatch:
 permissions:
-  # contents: read is sufficient. Docker Hub authentication uses repository
-  # secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN, never GITHUB_TOKEN, so
-  # packages: write is unnecessary and grants no access.
   contents: read
 
-# Unlike install.yml (which cancels in-flight PR checks because newer commits
-# supersede them), building and publishing the container artifact should not kill
-# long-running builds near completion. We use a non-ref-scoped concurrency group
-# with cancel-in-progress: false so runs serialize without aborting real work,
-# ensuring tag updates (such as `latest`) are published in strict commit order.
+# Do not cancel in-progress builds: image publishing produces real artifacts,
+# and serializing runs prevents tag updates from publishing out of order.
 concurrency:
   group: publish-image
   cancel-in-progress: false
 
-# IMAGE is hardcoded rather than derived from secrets.DOCKERHUB_USERNAME so
-# that Docker metadata tags are not masked as ***/dotfiles in workflow logs.
 env:
   IMAGE: dlresende/dotfiles
 
 jobs:
   publish-image:
-    # Prevent execution on forks where Docker Hub secrets are unavailable
     if: github.repository == 'dlresende/dotfiles'
     runs-on: ubuntu-24.04
-    # Install takes ~16m in CI; adding image layer export and multi-GB upload
-    # to Docker Hub needs headroom, while 180m still fails faster than the 6h ceiling.
     timeout-minutes: 180
     env:
-      # Publish images only on pushes to main. Workflow dispatches or branch runs
-      # build the image to validate the Dockerfile without logging in or pushing tags.
       PUSH: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      # BuildKit needs disk space for uncompressed layer snapshots and compressed export blobs.
-      # Prune unnecessary pre-installed tools inline rather than using third-party actions
-      # on runners that handle Docker Hub authentication secrets.
-      - name: Free runner disk space
-        run: |
-          df -h /
-          sudo rm -rf \
-            /usr/local/lib/android \
-            /opt/hostedtoolcache/CodeQL \
-            /usr/share/dotnet \
-            /opt/ghc \
-            /usr/local/.ghcup \
-            /usr/share/swift \
-            /usr/local/share/powershell
-          sudo docker image prune --all --force
-          df -h /
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # persist-credentials: false ensures GitHub tokens are not stored in
-          # .git/config, preventing accidental inclusion in public image layers.
           persist-credentials: false
 
       - name: Set up Docker Buildx
@@ -71,7 +39,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Generates tags: latest and date on default branch, short SHA on all builds.
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -82,10 +49,8 @@ jobs:
             type=raw,value={{date 'YYYYMMDD'}},enable={{is_default_branch}}
             type=sha,format=short,prefix=
 
-      # Cache (cache-from / cache-to) is omitted intentionally: the expensive
-      # pimp-my-ride layer depends on the dotfiles COPY, giving a 0% cache hit rate
-      # on workflow triggers (pushes to main). Additionally, GHA cache is capped at 10GB,
-      # and caching non-reproducible upstream installations could serve stale software.
+      # Caching is omitted: changes to dotfiles invalidate the layer, GHA cache is
+      # limited to 10GB, and non-reproducible upstream packages could produce stale images.
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -95,10 +60,8 @@ jobs:
           push: ${{ env.PUSH == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # head_ref holds source branch on pull_request (where ref_name is merge ref), while ref_name applies on push
+          build-args: |
+            BRANCH=${{ github.head_ref || github.ref_name }}
           provenance: false
           sbom: false
-
-      # Check disk usage after build to diagnose potential out-of-disk conditions.
-      - name: Verify disk usage after build
-        if: always()
-        run: df -h /

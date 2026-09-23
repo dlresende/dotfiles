@@ -1,6 +1,5 @@
 # check=skip=FromPlatformFlagConstDisallowed
-# Pinned to amd64: the digest below is a multi-arch index, and Homebrew-on-Linux
-# publishes no arm64 bottles, so an arm64 resolution would build ~95 formulae from source.
+# Pinned to amd64: Homebrew-on-Linux publishes no arm64 bottles
 # hadolint ignore=DL3029
 FROM --platform=linux/amd64 ubuntu:24.04@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3
 
@@ -13,8 +12,6 @@ LABEL org.opencontainers.image.title="dotfiles" \
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Base packages required for initial bootstrap. Build dependencies (build-essential,
-# procps, file) are intentionally omitted so pimp-my-ride's install_stuff() installs and tests them.
 # hadolint ignore=DL3008
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -28,19 +25,12 @@ RUN apt-get update && \
     locale-gen en_GB.UTF-8 && \
     rm -rf /var/lib/apt/lists/*
 
-# Prevent service restarts and daemon invocations in headless container build
+# No init system: stop postinst starting services
 RUN printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d && \
     chmod 0755 /usr/sbin/policy-rc.d
 
-# Pre-seed flatpak and flathub remote so remote failures surface early
-# hadolint ignore=DL3008
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends flatpak && \
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo && \
-    rm -rf /var/lib/apt/lists/*
-
-# useradd without --create-home avoids /etc/skel skeleton files conflicting with dotfiles.
-# Homebrew requires a non-root user with write access to /home/linuxbrew/.linuxbrew.
+# Homebrew refuses to run as root; pimp-my-ride uses sudo
+# --no-create-home: /etc/skel's .bashrc/.profile in $HOME would make install.sh's git pull abort with untracked conflicts
 RUN userdel --remove ubuntu && \
     groupadd --gid 1000 dev && \
     useradd --no-create-home --uid 1000 --gid 1000 --shell /bin/bash dev && \
@@ -61,28 +51,15 @@ ENV HOME=/home/dev \
 USER dev
 WORKDIR /home/dev
 
-# Copy only bootstrap-required dotfiles so doc/config edits do not invalidate the expensive build layer
-COPY --chown=1000:1000 .Brewfile .aliases .bash_profile .bashrc .completions .exports .functions .gemrc .gitconfig .path .tmux.conf ./
-COPY --chown=1000:1000 .local .local
-
-# configure_git links pre-commit hook into $HOME/.git/hooks; initializing git repo matches install.sh
-RUN git init --initial-branch=main . && \
-    git remote add origin https://github.com/dlresende/dotfiles.git
-
-# Sourcing .bashrc sets HOMEBREW_PREFIX needed by .path before running pimp-my-ride.
-# Caches and package lists are pruned in the same RUN layer to minimize immutable image size.
+ARG BRANCH=main
 ARG DEBUG=""
+COPY --chown=dev:dev .local/bin/install.sh /tmp/install.sh
 # hadolint ignore=DL3004,SC3046
-RUN source "${HOME}/.bashrc" && \
-    .local/bin/pimp-my-ride && \
+RUN /tmp/install.sh && \
+    source ~/.bashrc && \
     brew cleanup --prune=all -s && \
-    rm -rf "$(brew --cache)" "${HOME}/.cache" && \
+    rm -rf "$(brew --cache)" ~/.cache /tmp/install.sh && \
     sudo apt-get clean && \
     sudo rm -rf /var/lib/apt/lists/*
 
-# Copy remaining tracked files after the expensive bootstrap layer
-COPY --chown=1000:1000 .XCompose .gitignore .tigrc CNAME README.md _config.yml ./
-COPY --chown=1000:1000 .github .github
-
-# Login shell sources .bash_profile -> .bashrc -> .path as the single source of truth for PATH
 CMD ["/bin/bash", "-l"]

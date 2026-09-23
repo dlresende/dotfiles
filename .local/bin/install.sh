@@ -4,6 +4,8 @@
 
 [ -z "$DEBUG" ] || set -x
 
+: "${BRANCH:=main}"
+
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
@@ -36,7 +38,7 @@ EOF
     git remote add origin https://github.com/dlresende/dotfiles.git
   fi
 
-  git pull origin main
+  git pull origin "$BRANCH"
 
   # shellcheck source=/dev/null
   source ~/.bashrc
