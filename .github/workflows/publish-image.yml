@@ -1,6 +1,8 @@
 ---
 name: publish-image
 on:
+  pull_request:
+    branches: [ main ]
   push:
     branches: [ main ]
   workflow_dispatch:
@@ -22,7 +24,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
-      PUSH: ${{ github.ref == 'refs/heads/main' }}
+      PUSH: 'false'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
