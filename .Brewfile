@@ -1,6 +1,7 @@
 tap 'anomalyco/tap', trusted: true
 tap 'carvel-dev/carvel', trusted: true
 tap 'cloudfoundry/tap', trusted: true
+tap 'hashicorp/tap', trusted: true
 tap 'heroku/brew', trusted: true
 tap 'neovim/neovim', trusted: true
 tap 'ovh/tap', trusted: true
@@ -38,6 +39,7 @@ brew 'gopls'  # used by coc.nvim
 brew 'gradle'
 brew 'graphviz'
 brew 'gron'
+brew 'hashicorp/tap/vault'
 brew 'helm'
 brew 'heroku'
 brew 'htop'
@@ -73,9 +75,9 @@ brew 'nmap'
 brew 'node'
 brew 'oci-cli'
 brew 'opencode' if OS.linux?
-brew 'openldap'
 brew 'openjdk'
 brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk" if OS.mac?
+brew 'openldap'
 brew 'openssh'
 brew 'openssl'
 brew 'opentofu'
