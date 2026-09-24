@@ -90,9 +90,11 @@ brew 'readline' # required by ruby/rbenv
 brew 'reattach-to-user-namespace' if OS.mac? # required by tmux plugin tmux-yank
 brew 'ripgrep'    # required by coc.nvim
 brew 'ruby-install'
+brew 'ruff'        # used by coc.nvim (Python lint/format)
 brew 'sbt'
 brew 'scala'
 brew 'shellcheck' # used by vim in conjunction with bash-language-server
+brew 'solargraph'  # used by coc.nvim (Ruby LSP)
 brew 'telnet' if OS.mac?
 brew 'tig'
 brew 'tmux'
