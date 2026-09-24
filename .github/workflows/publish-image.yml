@@ -52,7 +52,7 @@ jobs:
       # Caching is omitted: changes to dotfiles invalidate the layer, GHA cache is
       # limited to 10GB, and non-reproducible upstream packages could produce stale images.
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
