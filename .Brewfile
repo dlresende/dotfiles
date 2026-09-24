@@ -102,6 +102,7 @@ brew 'tree'
 brew 'typescript'
 brew 'universal-ctags', args: ['HEAD'] # requried by vim/tagbar
 brew 'vim'
+brew 'vint'       # vimscript linter, used by `make lint` in vimfiles
 brew 'watch'
 brew 'webp'
 brew 'wget'
