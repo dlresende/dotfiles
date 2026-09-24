@@ -27,7 +27,7 @@ jobs:
       # of app names/ids to skip, not a boolean - `1` was a silent no-op.
       HOMEBREW_BUNDLE_MAS_SKIP: 497799835
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # The install script executes third-party code (the Homebrew
           # installer, rbenv-doctor, tpm plugins), and HOME is set to the
