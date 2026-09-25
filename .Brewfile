@@ -119,6 +119,7 @@ cask 'android-studio' if OS.mac?
 cask 'block-goose' if OS.mac?
 cask 'caffeine' if OS.mac?
 cask 'claude-code' # unguarded: this cask supports Linux, unlike the others
+cask 'cursor-cli', postinstall: "ln -sfn ${HOMEBREW_PREFIX}/bin/cursor-agent ${HOMEBREW_PREFIX}/bin/cursor" if OS.mac?
 cask 'docker-desktop' if OS.mac?
 cask 'firefox' if OS.mac?
 #cask 'fly'

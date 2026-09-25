@@ -103,6 +103,10 @@ install_stuff() {
         gnome-software-plugin-flatpak
 
       sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+      # No formula exists and the cask is macOS-only, so use the vendor installer
+      curl -fsSL https://cursor.com/install | bash
+      ln -sfn "${HOME}/.local/bin/cursor-agent" "${HOME}/.local/bin/cursor"
       ;;
   esac
 
