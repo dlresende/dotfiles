@@ -4,19 +4,6 @@
 : "${HOMEBREW_BUNDLE_FILE_GLOBAL:=$HOME/.Brewfile}"
 : "${OS:=$(uname -s)}"
 
-case "$OS" in
-  Darwin) : "${HOMEBREW_PREFIX:=/opt/homebrew}" ;;
-  Linux)  : "${HOMEBREW_PREFIX:=/home/linuxbrew/.linuxbrew}" ;;
-  *)      : "${HOMEBREW_PREFIX:=}" ;;
-esac
-export HOMEBREW_PREFIX
-
-# So `command -v brew` finds an existing install regardless of whether this
-# script was launched from a shell that sourced .exports. Appending, not
-# prepending, means this can never outrank .bashrc's own ordering (rbenv
-# shims ahead of Homebrew's bin) - safe to always run, no guard needed.
-[ -n "$HOMEBREW_PREFIX" ] && export PATH="$PATH:$HOMEBREW_PREFIX/bin"
-
 set -e # bail out early if any command fails
 set -u # fail if we hit unset variables
 set -o pipefail # fail if any component of any pipe fails
@@ -25,20 +12,37 @@ set -o pipefail # fail if any component of any pipe fails
 
 main() {
   case "$OS" in
-    Darwin) accept_xcode_license ;;
-    Linux)  configure_ubuntu ;;
+    Darwin)
+      : "${HOMEBREW_PREFIX:=/opt/homebrew}"
+      accept_xcode_license
+      configure_macos
+      ;;
+    Linux)
+      : "${HOMEBREW_PREFIX:=/home/linuxbrew/.linuxbrew}"
+      configure_ubuntu
+      install_linux_dependencies
+      export RUBY_CONFIGURE_OPTS="--with-zlib-dir=$HOMEBREW_PREFIX/opt/zlib"
+      ;;
+    *)
+      echo "Unsupported OS: $OS" >&2
+      return 1
+      ;;
   esac
+
+  export HOMEBREW_PREFIX
+
+  # So `command -v brew` finds an existing install regardless of whether this
+  # script was launched from a shell that sourced .exports. Appending, not
+  # prepending, means this can never outrank .bashrc's own ordering (rbenv
+  # shims ahead of Homebrew's bin) - safe to always run, no guard needed.
+  [ -n "$HOMEBREW_PREFIX" ] && export PATH="$PATH:$HOMEBREW_PREFIX/bin"
+
   switch_to_bash
   install_stuff
   install_ruby && check_rbenv
   configure_vim
   configure_tmux
   configure_git
-  case "$OS" in
-    Darwin)
-      configure_macos
-      ;;
-  esac
 }
 
 refresh_admin_credentials() {
@@ -73,6 +77,33 @@ switch_to_bash() {
   fi
 }
 
+install_linux_dependencies() {
+  refresh_admin_credentials
+
+  sudo apt-get update
+
+  # Install Homebrew dependencies
+  # https://docs.brew.sh/Homebrew-on-Linux#requirements
+  sudo apt-get install --yes \
+    build-essential \
+    procps \
+    curl \
+    file \
+    git
+
+  # Install Flatpak so we can manage more app installations from Homebrew
+  # https://flatpak.org/setup/Ubuntu
+  sudo apt-get install --yes \
+    flatpak \
+    gnome-software-plugin-flatpak
+
+  sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+  # No formula exists and the cask is macOS-only, so use the vendor installer
+  curl -fsSL https://cursor.com/install | bash
+  ln -sfn "${HOME}/.local/bin/cursor-agent" "${HOME}/.local/bin/cursor"
+}
+
 install_stuff() {
   local noise_level
 
@@ -82,33 +113,6 @@ install_stuff() {
   else
     noise_level='--debug'
   fi
-  
-  case "$OS" in
-    Linux)
-      sudo apt-get update
-
-      # Install Homebrew dependencies
-      # https://docs.brew.sh/Homebrew-on-Linux#requirements
-      sudo apt-get install --yes \
-        build-essential \
-        procps \
-        curl \
-        file \
-        git
-
-      # Install Flatpak so we can manage more app installations from Homebrew
-      # https://flatpak.org/setup/Ubuntu
-      sudo apt-get install --yes \
-        flatpak \
-        gnome-software-plugin-flatpak
-
-      sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-      # No formula exists and the cask is macOS-only, so use the vendor installer
-      curl -fsSL https://cursor.com/install | bash
-      ln -sfn "${HOME}/.local/bin/cursor-agent" "${HOME}/.local/bin/cursor"
-      ;;
-  esac
 
   ensure_homebrew_installed
 
@@ -149,14 +153,6 @@ log_tool_versions() {
 }
 
 install_ruby() {
-  # Link against Homebrew's zlib (installed by install_stuff above) rather
-  # than a stale system one, when present.
-  case "$OS" in
-    Linux)
-      [ -d "$HOMEBREW_PREFIX/opt/zlib" ] && export RUBY_CONFIGURE_OPTS="--with-zlib-dir=$HOMEBREW_PREFIX/opt/zlib"
-      ;;
-  esac
-
   rbenv install --skip-existing "$(rbenv install -l | grep -v - | tail -1)"
 }
 
