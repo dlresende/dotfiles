@@ -118,7 +118,7 @@ cask 'android-platform-tools' if OS.mac?
 cask 'android-studio' if OS.mac?
 cask 'block-goose' if OS.mac?
 cask 'caffeine' if OS.mac?
-cask 'claude-code' if OS.mac?
+cask 'claude-code' # unguarded: this cask supports Linux, unlike the others
 cask 'docker-desktop' if OS.mac?
 cask 'firefox' if OS.mac?
 #cask 'fly'
