@@ -116,9 +116,11 @@ install_stuff() {
 
   ensure_homebrew_installed
 
-  brew bundle check --global 2> /dev/null || brew bundle install --global --upgrade "$noise_level"
-  # brew bundle --upgrade skips casks; brew upgrade covers them too
-  brew upgrade "$noise_level"
+  # Runs unconditionally: the previous `brew bundle check || install` guard
+  # meant an already-converged machine never upgraded through bundle at all,
+  # leaving a blanket `brew upgrade` to do it - which also upgraded packages
+  # this Brewfile does not declare. bundle upgrades by default, casks included.
+  brew bundle install --global "$noise_level"
 
   log_tool_versions
 }
