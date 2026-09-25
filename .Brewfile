@@ -121,16 +121,16 @@ cask 'caffeine' if OS.mac?
 cask 'claude-code' # unguarded: this cask supports Linux, unlike the others
 cask 'cursor-cli', postinstall: "ln -sfn ${HOMEBREW_PREFIX}/bin/cursor-agent ${HOMEBREW_PREFIX}/bin/cursor" if OS.mac?
 cask 'docker-desktop' if OS.mac?
-cask 'firefox' if OS.mac?
+cask 'firefox', greedy: true if OS.mac?
 #cask 'fly'
 cask 'flycut' if OS.mac?
-cask 'gcloud-cli' if OS.mac?
-cask 'iterm2' if OS.mac?
+cask 'gcloud-cli', greedy: true if OS.mac?
+cask 'iterm2', greedy: true if OS.mac?
 cask 'libreoffice' if OS.mac?
 cask 'nextcloud' if OS.mac?
 cask 'ovhcloud-cli' if OS.mac?
-cask 'thunderbird' if OS.mac?
-cask 'vlc' if OS.mac?
+cask 'thunderbird', greedy: true if OS.mac?
+cask 'vlc', greedy: true if OS.mac?
 
 mas 'Xcode', id: 497799835 if OS.mac?
 
