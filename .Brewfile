@@ -134,12 +134,16 @@ cask 'vlc' if OS.mac?
 
 mas 'Xcode', id: 497799835 if OS.mac?
 
-flatpak 'com.mattjakeman.ExtensionManager' if OS.linux?
-flatpak 'com.protonvpn.www' if OS.linux?
-flatpak 'com.slack.Slack' if OS.linux?
-flatpak 'com.spotify.Client' if OS.linux?
-flatpak 'org.audacityteam.Audacity' if OS.linux?
-flatpak 'org.chromium.Chromium' if OS.linux?
-flatpak 'org.libreoffice.LibreOffice' if OS.linux?
-flatpak 'org.mozilla.thunderbird_esr' if OS.linux?
-flatpak 'org.videolan.VLC' if OS.linux?
+# Declared here so brew bundle creates the remote itself, rather than
+# pimp-my-ride shelling out to `sudo flatpak remote-add` beforehand.
+flathub = 'https://dl.flathub.org/repo/flathub.flatpakrepo'
+
+flatpak 'com.mattjakeman.ExtensionManager', url: flathub if OS.linux?
+flatpak 'com.protonvpn.www', url: flathub if OS.linux?
+flatpak 'com.slack.Slack', url: flathub if OS.linux?
+flatpak 'com.spotify.Client', url: flathub if OS.linux?
+flatpak 'org.audacityteam.Audacity', url: flathub if OS.linux?
+flatpak 'org.chromium.Chromium', url: flathub if OS.linux?
+flatpak 'org.libreoffice.LibreOffice', url: flathub if OS.linux?
+flatpak 'org.mozilla.thunderbird_esr', url: flathub if OS.linux?
+flatpak 'org.videolan.VLC', url: flathub if OS.linux?
