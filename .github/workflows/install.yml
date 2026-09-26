@@ -33,6 +33,8 @@ jobs:
           # installer, rbenv-doctor, tpm plugins), and HOME is set to the
           # workspace below, so don't leave a token behind in .git/config
           persist-credentials: false
+      # `brew bundle` performs flatpak --system operations unprivileged, which
+      # require polkit authorization on a headless CI runner.
       - name: Configure Flatpak polkit rules for headless CI
         if: runner.os == 'Linux'
         run: |
@@ -44,16 +46,6 @@ jobs:
                   return polkit.Result.YES;
               }
           });
-          EOF
-          fi
-          if [ -d /etc/polkit-1/localauthority/50-local.d ]; then
-            sudo tee /etc/polkit-1/localauthority/50-local.d/45-flatpak.pkla > /dev/null << 'EOF'
-          [Allow all users to manage flatpak]
-          Identity=unix-user:*
-          Action=org.freedesktop.Flatpak.*;org.freedesktop.flatpak.*
-          ResultAny=yes
-          ResultInactive=yes
-          ResultActive=yes
           EOF
           fi
       - run: echo "HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
