@@ -33,6 +33,7 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
 ├── .aliases               # Common command shortcuts (delete_branches, python3 mappings)
 ├── .functions             # Custom shell functions (e.g., cleanup_branches)
 ├── .completions           # Custom Bash completion scripts
+├── .curlrc                # Curl configuration (forces HTTP/1.1 for Homebrew)
 ├── .Brewfile              # Declarative package definitions (formulae, casks, flatpaks) with OS guards
 ├── .gitconfig             # Global Git settings (credential helper, untracked ~/.gitconfig.local include)
 ├── .tmux.conf             # Tmux configuration & TPM plugin management

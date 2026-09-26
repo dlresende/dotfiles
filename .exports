@@ -81,3 +81,6 @@ export PS1="\n\$([ \$? -gt 0 ] && printf '\[\033[31m\]'; printf '; \[\033[0m\]')
 
 export HOMEBREW_BUNDLE_FILE_GLOBAL="${HOME}/.Brewfile"
 export HOMEBREW_NO_ASK=1
+
+# Force HTTP/1.1 for Homebrew to avoid HTTP/2 stream resets on large bottles
+export HOMEBREW_CURLRC="${HOME}/.curlrc"
