@@ -18,7 +18,7 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
    - Runs `brew bundle` using `.Brewfile` to install CLI tools, GUI applications (macOS casks / Linux Flatpaks), and fonts.
    - Installs and activates the latest Ruby via `rbenv`.
    - Configures Vim plugins, Tmux TPM plugins, and Git pre-commit hooks.
-   - Applies platform-specific system settings (e.g., keyboard shortcuts on macOS, systemd lid-switch and NetworkManager Wi-Fi power-save behavior on Linux).
+   - Applies platform-specific system settings (e.g., keyboard shortcuts on macOS, systemd lid-switch behavior on Linux).
 
 ---
 
@@ -50,7 +50,6 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
     │   └── git/hooks/     # Git hooks (pre-commit)
     └── etc/               # System configuration overrides
         ├── macos/         # macOS system settings (symbolic hotkeys)
-        ├── NetworkManager/# NetworkManager configuration overrides (Linux)
         └── systemd/       # Systemd unit/configuration overrides (Linux)
 ```
 
