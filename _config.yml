@@ -1,3 +1,5 @@
+theme: minima
+
 # Jekyll excludes dotfiles by default, which would hide almost everything in
 # this repo (.local/bin/install, .bashrc, ...). Re-include them so Pages
 # serves the raw files instead of a 404.
