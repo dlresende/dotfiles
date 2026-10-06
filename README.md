@@ -16,6 +16,7 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
 2. **`.local/bin/pimp-my-ride`**: Automates full environment configuration:
    - Installs system packages (apt & Flatpak on Linux, Homebrew on macOS/Linux).
    - Runs `brew bundle` using `.Brewfile` to install CLI tools, GUI applications (macOS casks / Linux Flatpaks), and fonts.
+   - Installs the container runtime: the Docker Desktop cask on macOS, and rootless Docker on Linux from Docker's apt repository, registered as a systemd user service. Use `start-docker` and `stop-docker` to control the Linux daemon.
    - Installs and activates the latest Ruby via `rbenv`.
    - Configures Vim plugins, Tmux TPM plugins, and Git pre-commit hooks.
    - Applies platform-specific system settings (e.g., keyboard shortcuts on macOS, systemd lid-switch behavior on Linux).
