@@ -116,13 +116,19 @@ EOF
   # on, both to resolve dockerd-rootless.sh and to verify the daemon with
   # $BIN/docker. rootlesskit from Homebrew would be denied its user namespace:
   # Ubuntu pins its AppArmor profiles to /usr/bin.
-  sudo apt-get install --yes docker-ce docker-ce-rootless-extras slirp4netns
+  #
+  # Skipped on CI: registering the user unit needs a systemd user session a
+  # headless runner does not have.
+  if [ -z "${CI:-}" ]
+  then
+    sudo apt-get install --yes docker-ce docker-ce-rootless-extras slirp4netns
 
-  # The deb starts a rootful daemon on /var/run/docker.sock that would sit
-  # unused beside the user one.
-  sudo systemctl disable --now docker.service docker.socket
+    # The deb starts a rootful daemon on /var/run/docker.sock that would sit
+    # unused beside the user one.
+    sudo systemctl disable --now docker.service docker.socket
 
-  /usr/bin/dockerd-rootless-setuptool.sh install
+    /usr/bin/dockerd-rootless-setuptool.sh install
+  fi
 }
 
 install_stuff() {
