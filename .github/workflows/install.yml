@@ -48,6 +48,18 @@ jobs:
           });
           EOF
           fi
+      # Rootless Docker registers a systemd *user* unit, and a headless runner
+      # only has a user manager once one is started - without linger and
+      # XDG_RUNTIME_DIR the setuptool refuses to run.
+      - name: Start a systemd user session for rootless Docker
+        if: runner.os == 'Linux'
+        run: |
+          uid="$(id -u)"
+          sudo mkdir -p "/run/user/${uid}"
+          sudo chown "$USER:" "/run/user/${uid}"
+          sudo loginctl enable-linger "$USER"
+          sudo systemctl start "user@${uid}.service"
+          echo "XDG_RUNTIME_DIR=/run/user/${uid}" >> "$GITHUB_ENV"
       - run: echo "HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       - run: source .bashrc && DEBUG=1 .local/bin/pimp-my-ride
       - name: Verify a fresh shell can find Homebrew and its tools
