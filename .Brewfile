@@ -22,8 +22,7 @@ brew 'cmake'
 brew 'coreutils'
 brew 'csvkit'
 brew 'direnv'
-brew 'docker' if OS.linux? # no Docker Desktop cask for Linux; pimp-my-ride runs rootless instead
-brew 'docker-engine' if OS.linux? # daemon; the formula above is CLI only
+brew 'docker' if OS.linux? # client only; the daemon comes from Docker's apt repository via pimp-my-ride
 brew 'erlang'
 brew 'fontconfig'
 brew 'freetype'

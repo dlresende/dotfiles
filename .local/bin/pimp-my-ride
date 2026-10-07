@@ -80,6 +80,19 @@ switch_to_bash() {
 install_linux_dependencies() {
   refresh_admin_credentials
 
+  # A dedicated keyring trusts only Docker's repository; apt-key trusted them all.
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+    | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
+  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+  local codename
+  codename="$( . /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}" )"
+
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null << EOF
+deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${codename} stable
+EOF
+
   sudo apt-get update
 
   # Install Homebrew dependencies
@@ -97,39 +110,19 @@ install_linux_dependencies() {
     flatpak \
     gnome-software-plugin-flatpak
 
-  install_docker_rootless
-}
+  # The daemon comes from Docker's repository rather than Homebrew, and pulls
+  # docker-ce-cli and containerd.io with it, so /usr/bin holds the CLI, the
+  # daemon wrapper and rootlesskit together - which the setuptool below relies
+  # on, both to resolve dockerd-rootless.sh and to verify the daemon with
+  # $BIN/docker. rootlesskit from Homebrew would be denied its user namespace:
+  # Ubuntu pins its AppArmor profiles to /usr/bin.
+  sudo apt-get install --yes docker-ce docker-ce-rootless-extras slirp4netns
 
-install_docker_rootless() {
-  # rootlesskit and slirp4netns must come from apt rather than Homebrew: Ubuntu
-  # pins its AppArmor profiles for both to /usr/bin, and
-  # apparmor_restrict_unprivileged_userns=1 - default since 23.10 - denies the
-  # user namespace rootless Docker needs to anything without a matching
-  # profile. .path puts $HOMEBREW_PREFIX/bin ahead of /usr/bin, so a Homebrew
-  # build would win the PATH lookup and be denied. Hence neither is in
-  # .Brewfile.
-  #
-  # Docker publishes them only from its own apt repository.
-  local codename
-  codename="$( . /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}" )"
+  # The deb starts a rootful daemon on /var/run/docker.sock that would sit
+  # unused beside the user one.
+  sudo systemctl disable --now docker.service docker.socket
 
-  # A dedicated keyring trusts this one repository; apt-key trusted them all.
-  sudo install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-    | sudo gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg
-  sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null << EOF
-deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${codename} stable
-EOF
-
-  # install_linux_dependencies' earlier apt-get update predates the repository
-  # above, so apt has to look again before it can resolve the package.
-  sudo apt-get update
-
-  sudo apt-get install --yes \
-    docker-ce-rootless-extras \
-    slirp4netns
+  /usr/bin/dockerd-rootless-setuptool.sh install
 }
 
 install_stuff() {
@@ -149,13 +142,6 @@ install_stuff() {
   # leaving a blanket `brew upgrade` to do it - which also upgraded packages
   # this Brewfile does not declare. bundle upgrades by default, casks included.
   brew bundle install --global "$noise_level"
-
-  # After bundle, not with the apt packages above: the setuptool resolves
-  # dockerd-rootless.sh from $PATH and refuses to run without it, so it needs
-  # the docker-engine formula bundle has just (re)installed. The setuptool
-  # itself is the apt package's, so its absence is what marks this non-Linux.
-  [ ! -x /usr/bin/dockerd-rootless-setuptool.sh ] \
-    || /usr/bin/dockerd-rootless-setuptool.sh install
 
   log_tool_versions
 }
