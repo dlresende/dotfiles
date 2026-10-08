@@ -22,6 +22,7 @@ brew 'cmake'
 brew 'coreutils'
 brew 'csvkit'
 brew 'direnv'
+brew 'docker' if OS.linux? # client only; the daemon comes from Docker's apt repository via pimp-my-ride
 brew 'erlang'
 brew 'fontconfig'
 brew 'freetype'

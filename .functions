@@ -32,3 +32,12 @@ cleanup_branches() {
       ;;
   esac
 }
+
+start-docker() {
+  # enable so it returns at every login, --now so it is up immediately.
+  systemctl --user enable --now docker
+}
+
+stop-docker() {
+  systemctl --user stop docker
+}
