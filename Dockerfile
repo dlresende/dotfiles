@@ -18,6 +18,7 @@ RUN apt-get update && \
       ca-certificates \
       curl \
       git \
+      gnupg \
       locales \
       sudo \
       tzdata && \

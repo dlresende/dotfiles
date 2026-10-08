@@ -124,8 +124,10 @@ EOF
     uidmap
 
   # The deb starts a rootful daemon on /var/run/docker.sock that would sit
-  # unused beside the user one.
-  sudo systemctl disable --now docker.service docker.socket
+  # unused beside the user one; the stop is best effort, as the image build has
+  # no init to stop anything with.
+  sudo systemctl disable docker.service docker.socket
+  sudo systemctl stop docker.service docker.socket 2> /dev/null || :
 
   /usr/bin/dockerd-rootless-setuptool.sh install
 }
