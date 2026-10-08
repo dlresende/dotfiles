@@ -1,7 +1,6 @@
-# check=skip=FromPlatformFlagConstDisallowed
-# Pinned to amd64: Homebrew-on-Linux publishes no arm64 bottles
-# hadolint ignore=DL3029
-FROM --platform=linux/amd64 ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
+# Pinned to the multi-arch index of ubuntu:26.04 so linux/arm64 builds resolve
+# natively; the per-arch manifest under this digest is fetched per --platform.
+FROM ubuntu:26.04@sha256:f144425ff09be612d6d9ad965196e9cdc23dae1f42110a8a11a3e9a8198759f7
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 

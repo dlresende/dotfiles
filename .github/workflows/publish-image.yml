@@ -17,9 +17,19 @@ env:
   IMAGE: dlresende/dotfiles
 
 jobs:
-  publish-image:
-    if: github.repository == 'dlresende/dotfiles'
-    runs-on: ubuntu-24.04
+  # One native build per architecture: emulating arm64 under QEMU turns the
+  # half-hour install into hours, while the arm runner is free on public repos.
+  build:
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+            suffix: amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            suffix: arm64
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 180
     env:
       PUSH: ${{ github.ref == 'refs/heads/main' }}
@@ -51,6 +61,8 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: ${{ env.IMAGE }}
+          flavor: |
+            suffix=-${{ matrix.suffix }},onlatest=true
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value={{date 'YYYYMMDD'}},enable={{is_default_branch}}
@@ -58,12 +70,12 @@ jobs:
 
       # Caching is omitted: changes to dotfiles invalidate the layer, GHA cache is
       # limited to 10GB, and non-reproducible upstream packages could produce stale images.
-      - name: Build and push Docker image
+      - name: Build Docker image
         uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64
+          platforms: ${{ matrix.platform }}
           allow: security.insecure
           push: ${{ env.PUSH == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -73,3 +85,42 @@ jobs:
             BRANCH=${{ github.head_ref || github.ref_name }}
           provenance: false
           sbom: false
+
+  # Assembles the per-arch images into one multi-arch manifest list under the
+  # untagged names consumers pull.
+  merge:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value={{date 'YYYYMMDD'}},enable={{is_default_branch}}
+            type=sha,format=short,prefix=
+
+      - name: Create manifest list and push
+        run: |
+          for tag in $(jq -cr '.tags | join(" ")' <<< "$JSON"); do
+            docker buildx imagetools create -t "$tag" \
+              "${IMAGE}:${tag##*/}-amd64" "${IMAGE}:${tag##*/}-arm64"
+          done
+        env:
+          JSON: ${{ steps.meta.outputs.json }}
+
+      - name: Inspect image
+        run: docker buildx imagetools inspect "${{ env.IMAGE }}:latest"
