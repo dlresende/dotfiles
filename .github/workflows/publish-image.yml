@@ -24,10 +24,10 @@ jobs:
       matrix:
         include:
           - platform: linux/amd64
-            runner: ubuntu-24.04
+            runner: ubuntu-latest
             suffix: amd64
           - platform: linux/arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
             suffix: arm64
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 180
@@ -91,7 +91,7 @@ jobs:
   merge:
     if: github.ref == 'refs/heads/main'
     needs: build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Set up Docker Buildx
