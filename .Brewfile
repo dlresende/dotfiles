@@ -10,7 +10,6 @@ brew 'ack'
 brew 'autoconf'
 brew 'automake'
 brew 'awscli'
-brew 'azure-cli'
 brew 'bash'
 brew 'bash-language-server' # used by coc.nvim
 brew 'bitwarden-cli'
@@ -116,6 +115,7 @@ cask '1password-cli' if OS.mac?
 cask 'adobe-acrobat-reader' if OS.mac?
 cask 'android-platform-tools' if OS.mac?
 cask 'android-studio' if OS.mac?
+cask 'azure-cli' # unguarded: this cask supports Linux, unlike the others
 cask 'block-goose' if OS.mac?
 cask 'caffeine' if OS.mac?
 cask 'claude-code'

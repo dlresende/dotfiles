@@ -175,8 +175,8 @@ log_tool_versions() {
 
   # brew list --versions ignores casks unless told which type to list
   {
-    brew bundle list --formula --global | xargs brew list --versions --formula
-    brew bundle list --casks --global | xargs brew list --versions --cask
+    brew bundle list --formula --global | xargs brew list --versions --formula || :
+    brew bundle list --casks --global | xargs brew list --versions --cask || :
   } > "${log_file}"
 }
 
