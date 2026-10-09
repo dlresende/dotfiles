@@ -31,6 +31,13 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
+        with:
+          # The image's install runs rootlesskit's smoke test, which needs to
+          # create a user namespace that dockerd's default seccomp profile
+          # denies inside the build - consumed by the Dockerfile's
+          # --security=insecure RUN.
+          driver: docker-container
+          buildkitd-flags: --allow-insecure-entitlement security.insecure
 
       - name: Log in to Docker Hub
         if: env.PUSH == 'true'
@@ -57,6 +64,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
+          allow: security.insecure
           push: ${{ env.PUSH == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

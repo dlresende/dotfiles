@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 LABEL org.opencontainers.image.title="dotfiles" \
       org.opencontainers.image.description="Full-fidelity dotfiles development environment" \
       org.opencontainers.image.source="https://github.com/dlresende/dotfiles" \
-      org.opencontainers.image.base.name="ubuntu:24.04"
+      org.opencontainers.image.base.name="ubuntu:26.04"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -56,7 +56,11 @@ ARG BRANCH=main
 ARG DEBUG=""
 COPY --chown=dev:dev .local/bin/install.sh /tmp/install.sh
 # hadolint ignore=DL3004,SC3046
-RUN /tmp/install.sh && \
+# --security=insecure drops the default seccomp profile, without which
+# rootlesskit's smoke test inside pimp-my-ride cannot create the user
+# namespace the container runtime denies. The builder in publish-image.yml
+# enables the entitlement to match.
+RUN --security=insecure /tmp/install.sh && \
     source ~/.bashrc && \
     brew cleanup --prune=all -s && \
     rm -rf "$(brew --cache)" ~/.cache /tmp/install.sh && \
