@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 LABEL org.opencontainers.image.title="dotfiles" \
       org.opencontainers.image.description="Full-fidelity dotfiles development environment" \
       org.opencontainers.image.source="https://github.com/dlresende/dotfiles" \
-      org.opencontainers.image.base.name="ubuntu:24.04"
+      org.opencontainers.image.base.name="ubuntu:26.04"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
