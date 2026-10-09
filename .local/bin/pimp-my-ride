@@ -129,7 +129,13 @@ EOF
   sudo systemctl disable docker.service docker.socket
   sudo systemctl stop docker.service docker.socket 2> /dev/null || :
 
-  /usr/bin/dockerd-rootless-setuptool.sh install
+  # The setuptool's own RootlessKit smoke test cannot create the user namespace
+  # there either, and would abort the run, so registering the user unit waits
+  # for a real machine with an init.
+  if [ -d /run/systemd/system ]
+  then
+    /usr/bin/dockerd-rootless-setuptool.sh install
+  fi
 }
 
 install_stuff() {
