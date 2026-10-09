@@ -34,8 +34,8 @@ jobs:
         with:
           # The image's install runs rootlesskit's smoke test, which needs to
           # create a user namespace that dockerd's default seccomp profile
-          # denies inside the build. The entitlement is consumed by the
-          # --security=insecure RUN in the Dockerfile.
+          # denies inside the build - consumed by the Dockerfile's
+          # --security=insecure RUN.
           driver: docker-container
           buildkitd-flags: --allow-insecure-entitlement security.insecure
 
@@ -64,9 +64,6 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
-          # Consumes the security.insecure entitlement the builder allows,
-          # which the --security=insecure RUN in the Dockerfile requires for
-          # rootlesskit's smoke test.
           allow: security.insecure
           push: ${{ env.PUSH == 'true' }}
           tags: ${{ steps.meta.outputs.tags }}
