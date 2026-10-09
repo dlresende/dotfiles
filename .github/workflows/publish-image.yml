@@ -15,6 +15,9 @@ concurrency:
 
 env:
   IMAGE: dlresende/dotfiles
+  # Mirrors the matrix suffixes: the merge loop needs the same list to find
+  # the per-arch images, and GitHub matrices cannot feed a later job.
+  ARCH_SUFFIXES: amd64 arm64
 
 jobs:
   # One native build per architecture: emulating arm64 under QEMU turns the
@@ -86,8 +89,8 @@ jobs:
           provenance: false
           sbom: false
 
-  # Assembles the per-arch images into one multi-arch manifest list under the
-  # untagged names consumers pull.
+  # A manifest list is one registry operation over every per-arch image, so it
+  # waits here for both builds rather than happening inside either.
   merge:
     if: github.ref == 'refs/heads/main'
     needs: build
@@ -115,12 +118,17 @@ jobs:
 
       - name: Create manifest list and push
         run: |
-          for tag in $(jq -cr '.tags | join(" ")' <<< "$JSON"); do
-            docker buildx imagetools create -t "$tag" \
-              "${IMAGE}:${tag##*/}-amd64" "${IMAGE}:${tag##*/}-arm64"
+          for tag in $tags
+          do
+            image_names=()
+            for suffix in $ARCH_SUFFIXES
+            do
+              image_names+=("${IMAGE}:${tag##*:}-${suffix}")
+            done
+            docker buildx imagetools create -t "$tag" "${image_names[@]}"
           done
         env:
-          JSON: ${{ steps.meta.outputs.json }}
+          tags: ${{ steps.meta.outputs.tags }}
 
       - name: Inspect image
         run: docker buildx imagetools inspect "${{ env.IMAGE }}:latest"
