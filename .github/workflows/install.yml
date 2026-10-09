@@ -26,6 +26,10 @@ jobs:
       # would block until the job is killed. This is a space-separated list
       # of app names/ids to skip, not a boolean - `1` was a silent no-op.
       HOMEBREW_BUNDLE_MAS_SKIP: 497799835
+      # The image preinstalls brew's node@24, whose npm tree collides with the
+      # `node` formula when Homebrew's dependents check upgrades node@24 over
+      # it and the relink fails.
+      HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: '1'
     steps:
       - uses: actions/checkout@v7
         with:
