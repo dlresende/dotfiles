@@ -41,3 +41,18 @@ start-docker() {
 stop-docker() {
   systemctl --user stop docker
 }
+
+notify-tmux() {
+  # Ring terminal bell to trigger tmux tab alert
+  if [ -t 1 ]; then
+    printf '\a'
+  else
+    { printf '\a' > /dev/tty; } 2>/dev/null || printf '\a'
+  fi
+
+  # If a message is passed and running inside tmux, display it in the status bar
+  if [ -n "${TMUX:-}" ] && [ $# -gt 0 ]; then
+    tmux display-message "$*"
+  fi
+}
+
