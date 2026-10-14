@@ -120,18 +120,22 @@ jobs:
             type=sha,format=short,prefix=
 
       - name: Create manifest list and push
+        # Use immutable commit SHA as source to prevent midnight date rollover failures
         run: |
+          tag_args=()
           for tag in $tags
           do
-            image_names=()
-            for suffix in $ARCH_SUFFIXES
-            do
-              image_names+=("${IMAGE}:${tag##*:}-${suffix}")
-            done
-            docker buildx imagetools create -t "$tag" "${image_names[@]}"
+            tag_args+=(-t "$tag")
           done
+          image_sources=()
+          for suffix in $ARCH_SUFFIXES
+          do
+            image_sources+=("${IMAGE}:${GITHUB_SHA::7}-${suffix}")
+          done
+          docker buildx imagetools create "${tag_args[@]}" "${image_sources[@]}"
         env:
           tags: ${{ steps.meta.outputs.tags }}
+          GITHUB_SHA: ${{ github.sha }}
 
       - name: Inspect image
         run: docker buildx imagetools inspect "${{ env.IMAGE }}:latest"
