@@ -138,12 +138,13 @@ mas 'Xcode', id: 497799835 if OS.mac?
 # pimp-my-ride shelling out to `sudo flatpak remote-add` beforehand.
 flathub = 'https://dl.flathub.org/repo/flathub.flatpakrepo'
 
+# Flathub serves some of these apps for x86_64 only.
 flatpak 'com.mattjakeman.ExtensionManager', url: flathub if OS.linux?
 flatpak 'com.protonvpn.www', url: flathub if OS.linux?
-flatpak 'com.slack.Slack', url: flathub if OS.linux?
-flatpak 'com.spotify.Client', url: flathub if OS.linux?
+flatpak 'com.slack.Slack', url: flathub if OS.linux? && !Hardware::CPU.arm?
+flatpak 'com.spotify.Client', url: flathub if OS.linux? && !Hardware::CPU.arm?
 flatpak 'org.audacityteam.Audacity', url: flathub if OS.linux?
 flatpak 'org.chromium.Chromium', url: flathub if OS.linux?
 flatpak 'org.libreoffice.LibreOffice', url: flathub if OS.linux?
-flatpak 'org.mozilla.thunderbird_esr', url: flathub if OS.linux?
+flatpak 'org.mozilla.thunderbird_esr', url: flathub if OS.linux? && !Hardware::CPU.arm?
 flatpak 'org.videolan.VLC', url: flathub if OS.linux?
