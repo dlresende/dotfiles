@@ -23,6 +23,8 @@ jobs:
   # One native build per architecture: emulating arm64 under QEMU turns the
   # half-hour install into hours, while the arm runner is free on public repos.
   build:
+    # Fork builds lack Docker Hub credentials and cannot publish images.
+    if: github.repository == 'dlresende/dotfiles'
     strategy:
       matrix:
         include:
@@ -92,7 +94,8 @@ jobs:
   # A manifest list is one registry operation over every per-arch image, so it
   # waits here for both builds rather than happening inside either.
   merge:
-    if: github.ref == 'refs/heads/main'
+    # Forks lack credentials and manifest lists only publish on main.
+    if: github.repository == 'dlresende/dotfiles' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
