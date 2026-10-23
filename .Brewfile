@@ -66,6 +66,7 @@ brew 'libyaml'
 brew 'lua'
 brew 'mas' if OS.mac?
 brew 'maven'
+brew 'mermaid-cli'
 brew 'mr'
 brew 'msgpack'
 brew 'neovim'
