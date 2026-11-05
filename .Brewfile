@@ -78,7 +78,6 @@ brew 'anomalyco/tap/opencode' if OS.linux?
 brew 'openjdk'
 brew 'openjdk@25', postinstall: "mkdir -p ${HOME}/Library/Java/JavaVirtualMachines && ln -sfn ${HOMEBREW_PREFIX}/opt/openjdk@25/libexec/openjdk.jdk ${HOME}/Library/Java/JavaVirtualMachines/openjdk-25.jdk" if OS.mac?
 brew 'openldap'
-brew 'openssh'
 brew 'openssl'
 brew 'opentofu'
 brew 'perl' # required by mr

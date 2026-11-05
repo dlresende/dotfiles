@@ -104,6 +104,12 @@ EOF
     file \
     git
 
+  # macOS already ships OpenSSH, and Ubuntu's packaged server owns the
+  # privsep user, /run/sshd and PAM setup that Homebrew's openssh would
+  # otherwise leave us to configure by hand.
+  sudo apt-get install --yes \
+    openssh-server
+
   # Install Flatpak so we can manage more app installations from Homebrew
   # https://flatpak.org/setup/Ubuntu
   sudo apt-get install --yes \
