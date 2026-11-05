@@ -224,6 +224,39 @@ configure_git() {
   ln -sf "${HOME}/.local/bin/git/hooks/pre-commit" "${HOME}/.git/hooks"
 }
 
+configure_ssh_banner() {
+  local os_version
+  case "$OS" in
+    Darwin) os_version="$(sw_vers -productName) $(sw_vers -productVersion)" ;;
+    Linux)
+      os_version="$( . /etc/os-release && echo "${NAME} ${VERSION_ID:-}" )"
+      ;;
+  esac
+
+  printf '%s\n%s\n' "$(hostname)" "$os_version" \
+    | sudo tee /etc/ssh/banner > /dev/null
+  sudo chmod 0644 /etc/ssh/banner
+
+  # The drop-in only takes effect where sshd already includes sshd_config.d;
+  # otherwise the directive is appended to sshd_config itself (macOS).
+  if [ -d /etc/ssh/sshd_config.d ] && grep -q '^[[:space:]]*Include.*sshd_config.d' /etc/ssh/sshd_config
+  then
+    echo 'Banner /etc/ssh/banner' \
+      | sudo tee /etc/ssh/sshd_config.d/dotfiles-banner.conf > /dev/null
+  elif ! grep -qx 'Banner /etc/ssh/banner' /etc/ssh/sshd_config
+  then
+    echo 'Banner /etc/ssh/banner' | sudo tee -a /etc/ssh/sshd_config > /dev/null
+  fi
+
+  # macOS spawns sshd per connection, so it rereads the config next login;
+  # only Linux runs a resident daemon to validate and restart.
+  if [ "$OS" = Linux ]
+  then
+    sudo /usr/sbin/sshd -t
+    sudo systemctl restart ssh.service 2>/dev/null || :
+  fi
+}
+
 configure_macos() {
   local shortcuts="${HOME}/.local/etc/macos/com.apple.symbolichotkeys.plist"
 
@@ -236,6 +269,8 @@ configure_macos() {
   defaults import com.apple.symbolichotkeys "$shortcuts"
   defaults read com.apple.symbolichotkeys > /dev/null
   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
+  configure_ssh_banner
 }
 
 configure_ubuntu() {
@@ -243,6 +278,8 @@ configure_ubuntu() {
 
   sudo mkdir -p /etc/systemd/logind.conf.d/
   sudo cp "${HOME}/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf" /etc/systemd/logind.conf.d/
+
+  configure_ssh_banner
 }
 
 main
