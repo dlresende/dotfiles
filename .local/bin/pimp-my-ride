@@ -39,6 +39,7 @@ main() {
 
   switch_to_bash
   install_stuff
+  configure_ssh_banner
   install_ruby && check_rbenv
   configure_vim
   configure_tmux
@@ -228,6 +229,27 @@ configure_go_workspace() {
 
 configure_git() {
   ln -sf "${HOME}/.local/bin/git/hooks/pre-commit" "${HOME}/.git/hooks"
+}
+
+configure_ssh_banner() {
+  local os_version
+
+  case "$OS" in
+    Darwin) os_version="$(sw_vers -productName) $(sw_vers -productVersion)" ;;
+    Linux)
+      os_version="$( . /etc/os-release && echo "${NAME} ${VERSION_ID:-}" )"
+      ;;
+  esac
+
+  refresh_admin_credentials
+
+  printf '%s\n%s\n' "$(hostname)" "$os_version" \
+    | sudo tee /etc/ssh/banner > /dev/null
+  sudo chmod 0644 /etc/ssh/banner
+
+  sudo install -d -m 0755 /etc/ssh/sshd_config.d
+  echo 'Banner /etc/ssh/banner' \
+    | sudo tee /etc/ssh/sshd_config.d/dotfiles-banner.conf > /dev/null
 }
 
 configure_macos() {
