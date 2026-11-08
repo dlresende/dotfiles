@@ -276,11 +276,37 @@ configure_ubuntu() {
   # section keys) only fires for USB ids the kernel flags as ISO, and the
   # MacBook Pro 11,4's internal keyboard (05ac:0274) is incorrectly filed
   # under the JIS entry - so its engraved keycaps and keycodes disagree.
-  sudo cp "${HOME}/.local/etc/modprobe.d/hid_apple.conf" /etc/modprobe.d/
+  # Gated on the device: the module parameter is global, so installing it
+  # blindly would swap the outer keys of external Apple keyboards as well.
+  if has_apple_internal_keyboard
+  then
+    sudo cp "${HOME}/.local/etc/modprobe.d/hid_apple.conf" /etc/modprobe.d/
 
-  # hid_apple can be pulled in by the initramfs, and a stale image there
-  # ships its own modprobe.d; refresh so the fix covers early module loads.
-  sudo update-initramfs -u
+    # hid_apple can be pulled in by the initramfs, and a stale image there
+    # ships its own modprobe.d; refresh so the fix covers early module
+    # loads. A container has no initramfs-tools, so degrade to a no-op.
+    if command -v update-initramfs &> /dev/null
+    then
+      sudo update-initramfs -u
+    fi
+
+    echo "Installed the hid_apple key fixup; reboot for it to take effect."
+  fi
+}
+
+has_apple_internal_keyboard() {
+  local device
+
+  for device in /sys/bus/usb/devices/*
+  do
+    if [ "$(cat "$device/idVendor" 2> /dev/null)" = '05ac' ] &&
+      [ "$(cat "$device/idProduct" 2> /dev/null)" = '0274' ]
+    then
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 main
