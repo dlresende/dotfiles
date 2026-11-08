@@ -271,6 +271,16 @@ configure_ubuntu() {
 
   sudo mkdir -p /etc/systemd/logind.conf.d/
   sudo cp "${HOME}/.local/etc/systemd/do-nothing-when-lid-is-closed-on-external-power-supply.conf" /etc/systemd/logind.conf.d/
+
+  # hid_apple's auto iso_layout translation (which uncrosses the '`' and
+  # section keys) only fires for USB ids the kernel flags as ISO, and the
+  # MacBook Pro 11,4's internal keyboard (05ac:0274) is incorrectly filed
+  # under the JIS entry - so its engraved keycaps and keycodes disagree.
+  sudo cp "${HOME}/.local/etc/modprobe.d/hid_apple.conf" /etc/modprobe.d/
+
+  # hid_apple can be pulled in by the initramfs, and a stale image there
+  # ships its own modprobe.d; refresh so the fix covers early module loads.
+  sudo update-initramfs -u
 }
 
 main
