@@ -45,3 +45,8 @@ PATH="${HOME}/.rbenv/shims:${PATH}"
 
 # Add homedir binaries
 PATH="${HOME}/.local/bin:${PATH}"
+
+# Add Docker Desktop's user-installed CLI tools when available.
+if [ -d "${HOME}/.docker/bin" ]; then
+  PATH="${PATH}:${HOME}/.docker/bin"
+fi
