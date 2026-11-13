@@ -120,7 +120,6 @@ cask 'block-goose' if OS.mac?
 cask 'caffeine' if OS.mac?
 cask 'claude-code'
 cask 'codex'
-cask 'cursor-cli', postinstall: "ln -sfn ${HOMEBREW_PREFIX}/bin/cursor-agent ${HOMEBREW_PREFIX}/bin/cursor"
 cask 'docker-desktop' if OS.mac?
 cask 'firefox', greedy: true if OS.mac?
 #cask 'fly'
