@@ -1,3 +1,5 @@
+include "%L"
+
 <dead_acute> <C>			: "Ç"	U0106 # LATIN CAPITAL LETTER C WITH ACUTE
 <Multi_key> <acute> <C>			: "Ç"	U0106 # LATIN CAPITAL LETTER C WITH ACUTE
 <Multi_key> <apostrophe> <C>		: "Ç"	U0106 # LATIN CAPITAL LETTER C WITH ACUTE
