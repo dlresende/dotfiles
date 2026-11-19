@@ -61,16 +61,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Only the immutable per-arch candidate is published here: latest and
+      # date tags move in merge, once every architecture has built, so a
+      # failed leg never leaves a mutable tag half-updated. merge only ever
+      # consumes the <sha>-<suffix> tags below.
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v6
         with:
           images: ${{ env.IMAGE }}
           flavor: |
-            suffix=-${{ matrix.suffix }},onlatest=true
+            suffix=-${{ matrix.suffix }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value={{date 'YYYYMMDD'}},enable={{is_default_branch}}
             type=sha,format=short,prefix=
 
       # Caching is omitted: changes to dotfiles invalidate the layer, GHA cache is
