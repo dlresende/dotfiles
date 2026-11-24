@@ -29,7 +29,7 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
 ~
 ├── .bash_profile          # Login shell entry point (sources .bashrc)
 ├── .bashrc                # Interactive shell entry point; initializes direnv, Homebrew, and loads dotfiles
-├── .path                  # PATH hierarchy: Go, Homebrew, Java (macOS), rbenv shims, ~/.local/bin
+├── .path                  # PATH hierarchy: Go, Homebrew, Java, rbenv shims, ~/.local/bin
 ├── .exports               # Environment variables (OS, EDITOR, history, prompt, rbenv, Homebrew)
 ├── .aliases               # Common command shortcuts (delete_branches, python3 mappings)
 ├── .functions             # Custom shell functions (e.g., cleanup_branches)
