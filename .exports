@@ -25,6 +25,13 @@ esac
 HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
 export HOMEBREW_PREFIX HOMEBREW_CELLAR HOMEBREW_REPOSITORY
 
+# java_home fails before a JVM is registered on a fresh macOS installation.
+if [ "$OS" = 'Darwin' ] && JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null)"; then
+  export JAVA_HOME
+elif [ "$OS" = 'Linux' ] && [ -x "${HOMEBREW_PREFIX}/opt/openjdk/libexec/bin/java" ]; then
+  export JAVA_HOME="${HOMEBREW_PREFIX}/opt/openjdk/libexec"
+fi
+
 # Set SHELL to Homebrew bash if available, falling back to /bin/bash
 if [ -x "$HOMEBREW_PREFIX/bin/bash" ]; then
   export SHELL="$HOMEBREW_PREFIX/bin/bash"

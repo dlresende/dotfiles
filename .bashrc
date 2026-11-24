@@ -9,7 +9,7 @@ for file in ~/.{aliases,exports,completions,dotfilesrc,functions}; do
 done
 unset file
 
-# .path needs OS and HOMEBREW_PREFIX from .exports above, so it's sourced
+# .path needs HOMEBREW_PREFIX and JAVA_HOME from .exports, so it's sourced
 # separately, after the loop.
 # shellcheck source=/dev/null
 source ~/.path
