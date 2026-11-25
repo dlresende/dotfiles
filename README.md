@@ -29,7 +29,7 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
 ~
 ├── .bash_profile          # Login shell entry point (sources .bashrc)
 ├── .bashrc                # Interactive shell entry point; initializes direnv, Homebrew, and loads dotfiles
-├── .path                  # PATH hierarchy: Go, Homebrew, Java (macOS), rbenv shims, ~/.local/bin
+├── .path                  # PATH hierarchy: Go, Homebrew, Java, rbenv shims, ~/.local/bin
 ├── .exports               # Environment variables (OS, EDITOR, history, prompt, rbenv, Homebrew)
 ├── .aliases               # Common command shortcuts (delete_branches, python3 mappings)
 ├── .functions             # Custom shell functions (e.g., cleanup_branches)
@@ -60,12 +60,11 @@ curl -fsSL https://dotfiles.diegolemos.net/.local/bin/install.sh | bash
 
 Dotfiles are loaded by `.bashrc` in the following sequence:
 
-1. **`direnv` hook**: Initializes direnv.
-2. **`brew shellenv`**: Dynamically exports Homebrew paths (`$HOMEBREW_PREFIX`, `$PATH`, `$MANPATH`).
-3. **Dotfiles sourcing**: `~/.{aliases,path,exports,completions,dotfilesrc,functions}`
-   - **`.path`**: Guarantees `$HOME/.local/bin` and `$HOME/.rbenv/shims` precede Homebrew binaries on `$PATH`.
-   - **`.exports`**: Sets `$OS`, exports editor/locale defaults, configures extended history capture via `PROMPT_COMMAND` / `DEBUG` trap, and specifies Ruby build flags.
+1. **Dotfiles sourcing**: `~/.{aliases,exports,completions,dotfilesrc,functions}`
+   - **`.exports`**: Sets `$OS` and Homebrew paths, discovers and exports `$JAVA_HOME`, exports editor/locale defaults, and configures history capture via `PROMPT_COMMAND` / `DEBUG` trap.
    - **`.functions`**: Provides utilities such as `cleanup_branches` (safely removes local branches merged into the current branch).
+2. **`.path`**: Uses the variables from `.exports` to add Homebrew and Java binaries to `$PATH`, with `$HOME/.local/bin` and `$HOME/.rbenv/shims` taking precedence.
+3. **`direnv` hook**: Initializes direnv after the shell environment is configured.
 
 ---
 
